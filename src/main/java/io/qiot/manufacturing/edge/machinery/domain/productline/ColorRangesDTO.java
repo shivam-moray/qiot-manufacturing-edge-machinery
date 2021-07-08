@@ -4,10 +4,10 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class ColorRangesDTO {
-    public float rMin;
-    public float rMax;
-    public float gMin;
-    public float gMax;
-    public float bMin;
-    public float bMax;
+    public int redMin;
+    public int redMax;
+    public int greenMin;
+    public int greenMax;
+    public int blueMin;
+    public int blueMax;
 }

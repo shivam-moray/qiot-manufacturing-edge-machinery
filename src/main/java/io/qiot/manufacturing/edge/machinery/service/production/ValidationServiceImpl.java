@@ -1,7 +1,10 @@
 package io.qiot.manufacturing.edge.machinery.service.production;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 
+@ApplicationScoped
 public class ValidationServiceImpl implements ValidationService {
 
     @Override

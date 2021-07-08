@@ -4,14 +4,14 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class SizeChartRangesDTO {
-    public float chestMin;
-    public float chestMax;
-    public float shoulderMin;
-    public float shoulderMax;
-    public float backLengthMin;
-    public float backLengthMax;
-    public float waistMin;
-    public float waistMax;
-    public float hipMin;
-    public float hipMax;
+    public double chestMin;
+    public double chestMax;
+    public double shoulderMin;
+    public double shoulderMax;
+    public double backMin;
+    public double backMax;
+    public double waistMin;
+    public double waistMax;
+    public double hipMin;
+    public double hipMax;
 }

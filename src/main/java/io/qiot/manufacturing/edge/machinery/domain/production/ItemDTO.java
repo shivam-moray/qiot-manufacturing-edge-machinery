@@ -19,4 +19,6 @@ public class ItemDTO {
     public UUID productLineId;
     public SizeMetricsDTO sizeMetrics;
     public ColorMetricsDTO colorMetrics;
+    public double printing;
+    public double packaging;
 }

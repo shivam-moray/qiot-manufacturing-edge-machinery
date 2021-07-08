@@ -4,7 +4,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class ColorMetricsDTO {
-    public float r;
-    public float g;
-    public float b;
+    public int red;
+    public int green;
+    public int blue;
 }

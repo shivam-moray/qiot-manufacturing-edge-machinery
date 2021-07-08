@@ -10,6 +10,9 @@ public class ProductLineDTO {
     public UUID productLineId;
     public SizeChartRangesDTO sizeChart;
     public ColorRangesDTO color;
+    public PackagingRangesDTO print;
+    public PrintingRangesDTO packaging;
+    
 
     @Override
     public int hashCode() {
