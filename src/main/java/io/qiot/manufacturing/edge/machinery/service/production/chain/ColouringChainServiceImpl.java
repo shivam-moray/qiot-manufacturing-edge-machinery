@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import io.qiot.manufacturing.edge.machinery.domain.ItemDTO;
+import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.util.qualifier.chain.ColouringChainQualifier;
 import io.quarkus.scheduler.Scheduled;
 

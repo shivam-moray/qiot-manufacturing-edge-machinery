@@ -3,9 +3,9 @@ package io.qiot.manufacturing.edge.machinery.service.production.chain;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import io.qiot.manufacturing.edge.machinery.domain.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEvent;
+import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.service.production.ConveyorBeltService;
 
 public abstract class AbstractChainService implements ChainService {

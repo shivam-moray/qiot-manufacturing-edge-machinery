@@ -2,8 +2,8 @@ package io.qiot.manufacturing.edge.machinery.service.production;
 
 import java.util.UUID;
 
-import io.qiot.manufacturing.edge.machinery.domain.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
+import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 
 public interface ConveyorBeltService {
     void createNewItem(UUID productLineId, int itemId);

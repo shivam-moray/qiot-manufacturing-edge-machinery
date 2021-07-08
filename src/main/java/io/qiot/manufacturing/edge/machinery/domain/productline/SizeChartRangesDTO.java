@@ -3,7 +3,7 @@ package io.qiot.manufacturing.edge.machinery.domain.productline;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
-public class SizeChartDTO {
+public class SizeChartRangesDTO {
     public float chestMin;
     public float chestMax;
     public float shoulderMin;

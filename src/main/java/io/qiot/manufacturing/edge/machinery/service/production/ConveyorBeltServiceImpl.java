@@ -7,8 +7,8 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import io.qiot.manufacturing.edge.machinery.domain.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
+import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 
 public class ConveyorBeltServiceImpl implements ConveyorBeltService {
 

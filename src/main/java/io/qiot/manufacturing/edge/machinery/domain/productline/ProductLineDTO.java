@@ -8,8 +8,8 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @RegisterForReflection
 public class ProductLineDTO {
     public UUID productLineId;
-    public SizeChartDTO sizeChart;
-    public ColorDTO color;
+    public SizeChartRangesDTO sizeChart;
+    public ColorRangesDTO color;
 
     @Override
     public int hashCode() {
