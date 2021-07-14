@@ -3,9 +3,7 @@
  */
 package io.qiot.manufacturing.edge.machinery.service.production.chain;
 
-import java.util.PrimitiveIterator.OfDouble;
 import java.util.PrimitiveIterator;
-import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;

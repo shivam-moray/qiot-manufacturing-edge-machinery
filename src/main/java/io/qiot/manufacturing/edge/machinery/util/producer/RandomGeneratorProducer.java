@@ -5,7 +5,6 @@ import java.util.PrimitiveIterator.OfDouble;
 import java.util.PrimitiveIterator.OfInt;
 import java.util.Random;
 
-
 import javax.enterprise.context.ApplicationScoped;
 
 

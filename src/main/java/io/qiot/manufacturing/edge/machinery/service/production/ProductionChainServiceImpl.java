@@ -8,13 +8,13 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
 import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
 import io.qiot.manufacturing.edge.machinery.service.productline.ProductLineService;
+import io.qiot.manufacturing.edge.machinery.service.validation.ValidationService;
 import io.quarkus.scheduler.Scheduled;
 
 /**

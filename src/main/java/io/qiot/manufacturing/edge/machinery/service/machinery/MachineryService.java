@@ -7,4 +7,10 @@ public interface MachineryService {
 
     MachineryDataDTO checkRegistration() throws DataValidationException;
 
+    String getMachineryId();
+
+    String getMachinerySerial();
+
+    String getMachineryName();
+
 }

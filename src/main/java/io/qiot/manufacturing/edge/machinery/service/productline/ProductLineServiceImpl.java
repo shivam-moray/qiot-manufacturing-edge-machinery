@@ -18,7 +18,7 @@ import io.qiot.manufacturing.edge.machinery.domain.event.ProductLineChangedEvent
 import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 @ApplicationScoped

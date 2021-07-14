@@ -6,6 +6,7 @@ package io.qiot.manufacturing.edge.machinery.service.machinery;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -17,9 +18,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
 import io.qiot.manufacturing.edge.machinery.service.registration.RegistrationService;
 import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
+import io.quarkus.runtime.LaunchMode;
+import io.quarkus.runtime.configuration.ProfileManager;
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 public class MachineryServiceImpl implements MachineryService {
@@ -36,19 +39,17 @@ public class MachineryServiceImpl implements MachineryService {
     @Inject
     RegistrationService registrationService;
 
-    @ConfigProperty(name = "qiot.station.serial")
-    String STATION_SERIAL;
-    @ConfigProperty(name = "qiot.station.address")
-    String STATION_ADDRESS;
-    @ConfigProperty(name = "qiot.station.name")
-    String STATION_NAME;
+    @ConfigProperty(name = "qiot.machinery.serial")
+    String MACHINERY_SERIAL;
+    @ConfigProperty(name = "qiot.machinery.name")
+    String MACHINERY_NAME;
 
     @ConfigProperty(name = "qiot.mqtts.ks.password")
     String ksPassword;
     @ConfigProperty(name = "qiot.mqtts.ts.password")
     String tsPassword;
 
-    private MachineryDataDTO stationData;
+    private MachineryDataDTO machineryData;
 
     public MachineryDataDTO checkRegistration() throws DataValidationException {
         Path dataFilePath = Paths.get(dataFilePathString);
@@ -57,54 +58,64 @@ public class MachineryServiceImpl implements MachineryService {
                     "Device is already registered. Loading data from persistent volume...");
             try {
                 String datafileContent = Files.readString(dataFilePath);
-                stationData = MAPPER.readValue(datafileContent,
+                machineryData = MAPPER.readValue(datafileContent,
                         MachineryDataDTO.class);
             } catch (Exception e) {
-                LOGGER.error("An error occurred loading the station data file.",
+                LOGGER.error(
+                        "An error occurred loading the machinery data file.",
                         e);
                 throw new DataValidationException(e);
             }
-            LOGGER.info("Data loaded successfully: {}", stationData);
+            LOGGER.info("Data loaded successfully: {}", machineryData);
         } else {
             LOGGER.info(
                     "Device is not registered. Stepping through the registration process...");
 
-            stationData = new MachineryDataDTO();
-            stationData.serial = STATION_SERIAL;
-            stationData.name = STATION_NAME;
+            machineryData = new MachineryDataDTO();
+            machineryData.serial = MACHINERY_SERIAL;
+            machineryData.name = MACHINERY_NAME;
             try {
-                String stationId = registrationService.register(
-                        stationData.serial, stationData.name, ksPassword);
+                String machineryId = null;
+                if (ProfileManager.getActiveProfile()
+                        .equals(LaunchMode.DEVELOPMENT.toString()))
+                    machineryId = UUID.randomUUID().toString();
+                else
+                    machineryId = registrationService.register(
+                            machineryData.serial, machineryData.name,
+                            ksPassword);
 
-                LOGGER.info("Received station ID: {}", stationId);
-                stationData.id = stationId;
+                LOGGER.info("Received machinery ID: {}", machineryId);
+                machineryData.id = machineryId;
                 Files.createFile(dataFilePath);
 
-                String stationDataString = MAPPER
-                        .writeValueAsString(stationData);
-                Files.writeString(dataFilePath, stationDataString);
+                String machineryDataString = MAPPER
+                        .writeValueAsString(machineryData);
+                Files.writeString(dataFilePath, machineryDataString);
 
-                LOGGER.info("Data Created successfully: {}", stationData);
+                LOGGER.info("Data Created successfully: {}", machineryData);
             } catch (Exception e) {
                 LOGGER.error(
-                        "An error occurred registering the measurement station.",
+                        "An error occurred registering the measurement machinery.",
                         e);
                 throw new DataValidationException(e);
             }
         }
-        return stationData;
+        return machineryData;
     }
 
-    public String getStationId() {
-        return stationData.id;
+    @Override
+    public String getMachineryId() {
+        return machineryData.id;
     }
 
-    public String getStationSerial() {
-        return stationData.serial;
+    @Override
+    public String getMachinerySerial() {
+        return machineryData.serial;
     }
 
-    public String getStationName() {
-        return stationData.name;
+    @Override
+    public String getMachineryName() {
+        return machineryData.name;
     }
 
     public String getTrustStorePassword() {

@@ -9,7 +9,7 @@ import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 @RegisterForReflection

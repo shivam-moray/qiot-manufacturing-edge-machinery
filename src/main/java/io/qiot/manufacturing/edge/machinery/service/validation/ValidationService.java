@@ -1,4 +1,4 @@
-package io.qiot.manufacturing.edge.machinery.service.production;
+package io.qiot.manufacturing.edge.machinery.service.validation;
 
 import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 

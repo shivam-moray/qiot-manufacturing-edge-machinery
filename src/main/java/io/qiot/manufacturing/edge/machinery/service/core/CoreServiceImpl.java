@@ -4,11 +4,13 @@
 package io.qiot.manufacturing.edge.machinery.service.core;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import io.qiot.manufacturing.edge.machinery.domain.event.BootstrapCompletedEvent;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.service.production.ProductionChainService;
 import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
@@ -31,6 +33,9 @@ public class CoreServiceImpl implements CoreService {
 
     @Inject
     ProductionChainService productionChainService;
+    
+    @Inject
+    Event<BootstrapCompletedEvent> event;
 
     // private StationDataBean stationData;
 
@@ -38,6 +43,7 @@ public class CoreServiceImpl implements CoreService {
         LOGGER.info("The application is starting...{}");
         // stationData =
         machineryService.checkRegistration();
+        event.fire(new BootstrapCompletedEvent());
     }
 
 //    @Scheduled(every = "5s", delayed = "5s")
