@@ -62,19 +62,21 @@ public abstract class AbstractValidationMessageProducer {
 
         queue = context.createQueue(getValidationQueueName());
 
-        replyToQueueName = replyToQueueNameProducer.getReplyToQueueName(
-                machineryService.getMachineryId());
+        replyToQueueName = replyToQueueNameProducer
+                .getReplyToQueueName(machineryService.getMachineryId());
 
         replyToQueue = context.createQueue(replyToQueueName);
         producer.setJMSReplyTo(replyToQueue);
     }
 
     protected void doRequestValidation(AbstractValidationRequestEvent event) {
+        getLogger().info("{} stage validation request received.", getStage());
         try {
-            String paylod = MAPPER.writeValueAsString(event);
+            String payload = MAPPER.writeValueAsString(event);
+          getLogger().info("Message payload: {}", payload);
             TextMessage message = context.createTextMessage();
             message.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
-            message.setText(paylod);
+            message.setText(payload);
             message.setJMSReplyTo(replyToQueue);
             producer.send(queue, message);
         } catch (JMSException e) {

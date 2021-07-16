@@ -13,5 +13,5 @@ public class ValidationResponseDTO {
     public UUID productLineId;
     public int itemId;
     public ProductionChainStageEnum stage;
-    public boolean validated;
+    public boolean valid;
 }

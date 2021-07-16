@@ -6,6 +6,8 @@ import java.util.UUID;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
@@ -13,7 +15,6 @@ import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
 import io.qiot.manufacturing.edge.machinery.service.production.ConveyorBeltService;
 import io.qiot.manufacturing.edge.machinery.service.productline.ProductLineService;
 import io.qiot.manufacturing.edge.machinery.util.producer.RandomGeneratorProducer;
-import io.quarkus.scheduler.Scheduled;
 
 public abstract class AbstractChainService implements ChainService {
 
@@ -28,20 +29,33 @@ public abstract class AbstractChainService implements ChainService {
 
     protected UUID productLineId;
 
-    @Scheduled(every = "5s")
-    @Override
-    public void simulate() {
+    public void doSimulate() {
         ItemDTO item = poll(getStage());
+        if (Objects.isNull(item)) {
+            getLogger().info("No items available in conveyor belt for stage {}",
+                    getStage());
+            return;
+        }
+        getLogger().info(
+                "{} process started for Item #{} and Product Line #{}.",
+                getStage(), item.id, item.productLineId);
         checkProductLineId(item.productLineId);
+        // if (Objects.isNull(item.productLineId)) {
+        // getLogger().info("No Product Line available.");
+        // return;
+        // }
         item.stage = getStage();
-        doSimulate(item);
+        generate(item);
+        getLogger().info(
+                "{} process completed for Item #{} and Product Line #{}.",
+                getStage(), item.id, item.productLineId);
         notify(item);
     }
 
     private void notify(ItemDTO item) {
         StageCompletedEvent event = new StageCompletedEvent();
         event.item = item;
-        getEvent().fireAsync(event);
+        getEvent().fire(event);
     }
 
     private void checkProductLineId(UUID productLineId) {
@@ -58,7 +72,7 @@ public abstract class AbstractChainService implements ChainService {
 
     protected abstract ProductionChainStageEnum getStage();
 
-    protected abstract void doSimulate(ItemDTO item);
+    protected abstract void generate(ItemDTO item);
 
     protected abstract Event<StageCompletedEvent> getEvent();
 
@@ -66,5 +80,7 @@ public abstract class AbstractChainService implements ChainService {
         ItemDTO item = conveyorBeltService.nextItemInQueue(stage);
         return item;
     }
+
+    protected abstract Logger getLogger();
 
 }

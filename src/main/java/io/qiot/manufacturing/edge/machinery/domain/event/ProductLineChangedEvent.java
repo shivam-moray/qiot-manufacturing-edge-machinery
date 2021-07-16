@@ -5,14 +5,5 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class ProductLineChangedEvent {
-    private final ProductLineDTO productLine;
-
-    public ProductLineChangedEvent(ProductLineDTO productLine) {
-        this.productLine = productLine;
-    }
-
-    public ProductLineDTO getProductLine() {
-        return productLine;
-    }
-
+    public ProductLineDTO productLine;
 }

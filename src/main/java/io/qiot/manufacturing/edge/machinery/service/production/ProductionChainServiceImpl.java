@@ -3,6 +3,7 @@
  */
 package io.qiot.manufacturing.edge.machinery.service.production;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -21,6 +22,7 @@ import io.quarkus.scheduler.Scheduled;
  * @author andreabattaglia
  *
  */
+@ApplicationScoped
 public class ProductionChainServiceImpl implements ProductionChainService {
 
     @Inject
@@ -45,11 +47,11 @@ public class ProductionChainServiceImpl implements ProductionChainService {
      * EVENTS
      */
 
-    @Scheduled(every = "10s")
+    @Scheduled(every = "3s")
     // @Override
     public void produce() {
         if (!productLineService.hasProductLine()) {
-            LOGGER.warn("No product Liner available");
+            LOGGER.warn("No ProductLine available");
             return;
         }
 
@@ -57,7 +59,8 @@ public class ProductionChainServiceImpl implements ProductionChainService {
         ProductLineDTO productLineDTO = productLineService
                 .getCurrentProductLine();
 
-        int itemId = countersService.recordNewItem(productLineDTO.productLineId);
+        int itemId = countersService
+                .recordNewItem(productLineDTO.productLineId);
 
         // setup new item
         conveyorBeltService.createNewItem(productLineDTO.productLineId, itemId);
@@ -65,6 +68,7 @@ public class ProductionChainServiceImpl implements ProductionChainService {
     }
 
     void onStageCompleted(@Observes StageCompletedEvent event) {
+        LOGGER.info("Recording changes and notifying...");
         ItemDTO item = event.item;
         countersService.recordStageEnd(item.id, item.productLineId, item.stage);
         conveyorBeltService.moveToWaitingQueue(item);
@@ -74,14 +78,15 @@ public class ProductionChainServiceImpl implements ProductionChainService {
     void onValidationSuccessfull(@Observes ValidationSuccessfullEvent event) {
         ItemDTO item = conveyorBeltService.moveToNextStage(event.itemId,
                 event.stage);
-        countersService.recordStageSuccess(item.id, item.productLineId, item.stage);
+        countersService.recordStageSuccess(item.id, item.productLineId,
+                item.stage);
         conveyorBeltService.moveToNextStage(item.id, item.stage);
     };
 
     void onValidationFailed(@Observes ValidationFailedEvent event) {
-        ItemDTO item = conveyorBeltService.dropItem(event.itemId,
-                event.stage);
-        countersService.recordStageFailure(item.id, item.productLineId, item.stage);
+        ItemDTO item = conveyorBeltService.dropItem(event.itemId, event.stage);
+        countersService.recordStageFailure(item.id, item.productLineId,
+                item.stage);
     };
 
 }

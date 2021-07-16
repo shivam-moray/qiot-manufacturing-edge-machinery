@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
-import io.qiot.manufacturing.edge.machinery.service.registration.RegistrationService;
 import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
 import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.configuration.ProfileManager;
@@ -25,6 +25,7 @@ import io.quarkus.runtime.configuration.ProfileManager;
  * @author andreabattaglia
  *
  */
+@ApplicationScoped
 public class MachineryServiceImpl implements MachineryService {
 
     @Inject
@@ -36,8 +37,8 @@ public class MachineryServiceImpl implements MachineryService {
     @Inject
     ObjectMapper MAPPER;
 
-    @Inject
-    RegistrationService registrationService;
+//    @Inject
+//    RegistrationService registrationService;
 
     @ConfigProperty(name = "qiot.machinery.serial")
     String MACHINERY_SERIAL;
@@ -77,12 +78,14 @@ public class MachineryServiceImpl implements MachineryService {
             try {
                 String machineryId = null;
                 if (ProfileManager.getActiveProfile()
-                        .equals(LaunchMode.DEVELOPMENT.toString()))
+                        .equals(LaunchMode.DEVELOPMENT.getDefaultProfile())) {
                     machineryId = UUID.randomUUID().toString();
-                else
-                    machineryId = registrationService.register(
-                            machineryData.serial, machineryData.name,
-                            ksPassword);
+                }
+//                else
+//                    machineryId = registrationService.register(
+//                            machineryData.serial, machineryData.name,
+//                            ksPassword);
+//                }
 
                 LOGGER.info("Received machinery ID: {}", machineryId);
                 machineryData.id = machineryId;

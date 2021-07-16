@@ -30,7 +30,7 @@ import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.util.producer.ReplyToQueueNameProducer;
 
 @ApplicationScoped
-public class WeavingValidationMessageConsumer implements Runnable {
+public class ValidationMessageConsumer implements Runnable {
 
     @Inject
     Logger LOGGER;
@@ -98,7 +98,7 @@ public class WeavingValidationMessageConsumer implements Runnable {
                 String messagePayload = message.getBody(String.class);
                 ValidationResponseDTO messageDTO = MAPPER
                         .readValue(messagePayload, ValidationResponseDTO.class);
-                if (messageDTO.validated) {
+                if (messageDTO.valid) {
                     ValidationSuccessfullEvent event = new ValidationSuccessfullEvent();
                     event.productLineId = messageDTO.productLineId;
                     event.itemId = messageDTO.itemId;

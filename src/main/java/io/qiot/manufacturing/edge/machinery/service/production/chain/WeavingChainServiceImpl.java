@@ -7,7 +7,6 @@ import java.util.PrimitiveIterator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -17,15 +16,15 @@ import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEve
 import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.domain.production.SizeMetricsDTO;
 import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
-import io.qiot.manufacturing.edge.machinery.util.qualifier.chain.WeavingChainQualifier;
+import io.quarkus.scheduler.Scheduled;
 
 /**
  * @author andreabattaglia
  *
  */
 @ApplicationScoped
-@Typed(WeavingChainServiceImpl.class)
-@WeavingChainQualifier
+//@Typed(WeavingChainServiceImpl.class)
+//@WeavingChainQualifier
 public class WeavingChainServiceImpl extends AbstractChainService {
 
     @Inject
@@ -41,6 +40,11 @@ public class WeavingChainServiceImpl extends AbstractChainService {
     private PrimitiveIterator.OfDouble hipRandomNumberGenerator;
 
     @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
+
+    @Override
     protected ProductionChainStageEnum getStage() {
         return ProductionChainStageEnum.WEAVING;
     }
@@ -48,6 +52,12 @@ public class WeavingChainServiceImpl extends AbstractChainService {
     @Override
     protected Event<StageCompletedEvent> getEvent() {
         return event;
+    }
+
+    @Scheduled(every = "2s")
+    @Override
+    public void simulate() {
+        super.doSimulate();
     }
 
     @Override
@@ -60,14 +70,19 @@ public class WeavingChainServiceImpl extends AbstractChainService {
     }
 
     @Override
-    protected void doSimulate(ItemDTO item) {
+    protected void generate(ItemDTO item) {
         SizeMetricsDTO metrics=new SizeMetricsDTO();
         metrics.chest = chestRandomNumberGenerator.nextDouble();
         metrics.shoulder = shoulderRandomNumberGenerator.nextDouble();
         metrics.back = backRandomNumberGenerator.nextDouble();
         metrics.waist = waistRandomNumberGenerator.nextDouble();
         metrics.hip = hipRandomNumberGenerator.nextDouble();
-        
+        item.sizeMetrics=metrics;
+        try {
+            Thread.sleep(2000L); 
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     

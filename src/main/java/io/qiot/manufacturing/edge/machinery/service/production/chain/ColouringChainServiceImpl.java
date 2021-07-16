@@ -7,7 +7,6 @@ import java.util.PrimitiveIterator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -17,15 +16,15 @@ import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEve
 import io.qiot.manufacturing.edge.machinery.domain.production.ColorMetricsDTO;
 import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
 import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
-import io.qiot.manufacturing.edge.machinery.util.qualifier.chain.ColouringChainQualifier;
+import io.quarkus.scheduler.Scheduled;
 
 /**
  * @author andreabattaglia
  *
  */
 @ApplicationScoped
-@Typed(ColouringChainServiceImpl.class)
-@ColouringChainQualifier
+//@Typed(ColouringChainServiceImpl.class)
+//@ColouringChainQualifier
 public class ColouringChainServiceImpl extends AbstractChainService {
 
     @Inject
@@ -39,6 +38,11 @@ public class ColouringChainServiceImpl extends AbstractChainService {
     private PrimitiveIterator.OfInt blueRandomNumberGenerator;
 
     @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
+
+    @Override
     protected ProductionChainStageEnum getStage() {
         return ProductionChainStageEnum.COLORING;
     }
@@ -46,6 +50,12 @@ public class ColouringChainServiceImpl extends AbstractChainService {
     @Override
     protected Event<StageCompletedEvent> getEvent() {
         return event;
+    }
+
+    @Scheduled(every = "2s")
+    @Override
+    public void simulate() {
+        super.doSimulate();
     }
 
     @Override
@@ -56,11 +66,16 @@ public class ColouringChainServiceImpl extends AbstractChainService {
     }
 
     @Override
-    protected void doSimulate(ItemDTO item) {
+    protected void generate(ItemDTO item) {
         ColorMetricsDTO metrics = item.colorMetrics;
         metrics.red = redRandomNumberGenerator.nextInt();
         metrics.green = greenRandomNumberGenerator.nextInt();
         metrics.blue = blueRandomNumberGenerator.nextInt();
+        item.colorMetrics=metrics;
+        try {
+            Thread.sleep(2000L); 
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
-
 }

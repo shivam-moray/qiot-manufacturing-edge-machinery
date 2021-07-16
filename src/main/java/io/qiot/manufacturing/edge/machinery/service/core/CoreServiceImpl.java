@@ -14,19 +14,22 @@ import io.qiot.manufacturing.edge.machinery.domain.event.BootstrapCompletedEvent
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.service.production.ProductionChainService;
 import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
-import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.scheduler.Scheduler;
 
 /**
  * @author andreabattaglia
  *
  */
-@Startup
+//@Startup(1)
 @ApplicationScoped
 public class CoreServiceImpl implements CoreService {
 
     @Inject
     Logger LOGGER;
+
+    @Inject
+    Scheduler scheduler;
 
     @Inject
     MachineryService machineryService;
@@ -42,12 +45,19 @@ public class CoreServiceImpl implements CoreService {
     void onStart(@Observes StartupEvent ev) throws DataValidationException {
         LOGGER.info("The application is starting...{}");
         // stationData =
+        scheduler.pause(); 
         machineryService.checkRegistration();
         event.fire(new BootstrapCompletedEvent());
+        scheduler.resume(); 
     }
 
-//    @Scheduled(every = "5s", delayed = "5s")
-//    void startProduction() {
-//        productionChainService.produce();
-//    }
+    void ping() {
+       scheduler.pause(); 
+       scheduler.pause("myIdentity"); 
+       if (scheduler.isRunning()) {
+          throw new IllegalStateException("This should never happen!");
+       }
+       scheduler.resume("myIdentity"); 
+       scheduler.resume(); 
+    }
 }

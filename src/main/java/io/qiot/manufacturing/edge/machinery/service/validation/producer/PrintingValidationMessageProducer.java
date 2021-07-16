@@ -10,6 +10,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
+import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestPrintingValidationEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestWeavingValidationEvent;
 
 @ApplicationScoped
@@ -33,7 +34,7 @@ public class PrintingValidationMessageProducer
     }
 
     public void requestValidation(
-            @Observes RequestWeavingValidationEvent event) {
+            @Observes RequestPrintingValidationEvent event) {
         super.doRequestValidation(event);
     }
 

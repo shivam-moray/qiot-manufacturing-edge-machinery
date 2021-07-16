@@ -10,8 +10,8 @@ public class ProductLineDTO {
     public UUID productLineId;
     public SizeChartRangesDTO sizeChart;
     public ColorRangesDTO color;
-    public PackagingRangesDTO print;
-    public PrintingRangesDTO packaging;
+    public PrintingRangesDTO print;
+    public PackagingRangesDTO packaging;
     
 
     @Override
@@ -29,6 +29,23 @@ public class ProductLineDTO {
             return false;
         ProductLineDTO other = (ProductLineDTO) obj;
         return Objects.equals(productLineId, other.productLineId);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ProductLineDTO [productLineId=");
+        builder.append(productLineId);
+        builder.append(", sizeChart=");
+        builder.append(sizeChart);
+        builder.append(", color=");
+        builder.append(color);
+        builder.append(", print=");
+        builder.append(print);
+        builder.append(", packaging=");
+        builder.append(packaging);
+        builder.append("]");
+        return builder.toString();
     }
 
 }

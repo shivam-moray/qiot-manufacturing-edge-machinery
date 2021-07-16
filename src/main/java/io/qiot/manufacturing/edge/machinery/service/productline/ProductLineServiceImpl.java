@@ -1,6 +1,7 @@
 package io.qiot.manufacturing.edge.machinery.service.productline;
 
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -14,8 +15,14 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.qiot.manufacturing.edge.machinery.domain.event.ProductLineChangedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
+import io.qiot.manufacturing.edge.machinery.util.producer.SampleProductLineProducer;
+import io.quarkus.runtime.LaunchMode;
+import io.quarkus.runtime.configuration.ProfileManager;
 
 /**
  * @author andreabattaglia
@@ -24,6 +31,7 @@ import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
 @ApplicationScoped
 class ProductLineServiceImpl implements ProductLineService {
 
+    private ReadWriteLock readWriteLock;
     private final Lock readLock;
     private final Lock writeLock;
 
@@ -36,14 +44,31 @@ class ProductLineServiceImpl implements ProductLineService {
     @Inject
     Logger LOGGER;
 
+    @Inject
+    ObjectMapper MAPPER;
+
+    @Inject
+    SampleProductLineProducer productLineProducer;
+
     public ProductLineServiceImpl() {
-        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+        productLines = new TreeMap<UUID, ProductLineDTO>();
+        this.readWriteLock = new ReentrantReadWriteLock();
         this.readLock = readWriteLock.readLock();
         this.writeLock = readWriteLock.writeLock();
     }
 
     @PostConstruct
     void init() {
+        if (ProfileManager.getActiveProfile()
+                .equals(LaunchMode.DEVELOPMENT.getDefaultProfile())) {
+            ProductLineDTO pl = productLineProducer.generateProductLine();
+            ProductLineChangedEvent event = new ProductLineChangedEvent();
+            event.productLine = pl;
+            try {
+                newProductLine(event);
+            } catch (JsonProcessingException e) {
+            }
+        }
     }
 
     @Override
@@ -51,12 +76,17 @@ class ProductLineServiceImpl implements ProductLineService {
         return currentProductLine != null;
     }
 
-    void newProductLine(@Observes ProductLineChangedEvent event) {
+    void newProductLine(@Observes ProductLineChangedEvent event)
+            throws JsonProcessingException {
+        LOGGER.info("Received new Product Line:\n\n{}",
+                MAPPER.writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(event.productLine));
         writeLock.lock();
-        {
-            currentProductLine = event.getProductLine();
-            productLines.put(event.getProductLine().productLineId,
-                    event.getProductLine());
+        try {
+            currentProductLine = event.productLine;
+            productLines.put(event.productLine.productLineId,
+                    event.productLine);
+        } finally {
             writeLock.unlock();
         }
     }

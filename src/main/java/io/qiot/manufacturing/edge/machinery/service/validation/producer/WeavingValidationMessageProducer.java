@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestWeavingValidationEvent;
 
@@ -16,11 +19,14 @@ import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestWeavingVal
 public class WeavingValidationMessageProducer
         extends AbstractValidationMessageProducer {
 
-    @ConfigProperty(name = "qiot.production.chain.validation.weaving.queue", defaultValue = "weavingValidation")
+    @ConfigProperty(name = "qiot.production.chain.validation.weaving.queue")
     String validationQueueName;
 
     @Inject
     Logger LOGGER;
+    
+    @Inject
+    ObjectMapper MAPPER;
 
     @PostConstruct
     void init() {
@@ -34,6 +40,14 @@ public class WeavingValidationMessageProducer
 
     public void requestValidation(
             @Observes RequestWeavingValidationEvent event) {
+//        String payload;
+//        try {
+//            payload = MAPPER.writeValueAsString(event);
+//        getLogger().info("Message payload: {}", payload);
+//        } catch (JsonProcessingException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
         super.doRequestValidation(event);
     }
 
