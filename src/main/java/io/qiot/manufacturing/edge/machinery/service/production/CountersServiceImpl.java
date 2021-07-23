@@ -39,6 +39,10 @@ public class CountersServiceImpl implements CountersService {
                         new ProductionCountersDTO(productLineId));
             int id = productionCounters.get(productLineId).totalItems
                     .incrementAndGet();
+            // TODO: improve state transition here
+            productionCounters.get(productLineId).stageCounters
+                    .get(ProductionChainStageEnum.WEAVING).incrementAndGet();
+
             return id;
         } finally {
             logProductLine();
@@ -55,6 +59,8 @@ public class CountersServiceImpl implements CountersService {
     @Override
     public void recordStageEnd(int itemId, UUID productLineId,
             ProductionChainStageEnum stage) {
+        productionCounters.get(productLineId).stageCounters.get(stage)
+                .decrementAndGet();
         productionCounters.get(productLineId).waitingForValidationCounters
                 .get(stage).incrementAndGet();
         logProductLine();
@@ -66,8 +72,6 @@ public class CountersServiceImpl implements CountersService {
         try {
             productionCounters.get(productLineId).waitingForValidationCounters
                     .get(stage).decrementAndGet();
-            productionCounters.get(productLineId).stageCounters.get(stage)
-                    .decrementAndGet();
             if (stage == ProductionChainStageEnum.PACKAGING) {
                 productionCounters.get(productLineId).completed
                         .incrementAndGet();
@@ -88,8 +92,6 @@ public class CountersServiceImpl implements CountersService {
             ProductionChainStageEnum stage) {
         productionCounters.get(productLineId).waitingForValidationCounters
                 .get(stage).decrementAndGet();
-        productionCounters.get(productLineId).stageCounters.get(stage)
-                .decrementAndGet();
         productionCounters.get(productLineId).discarded.incrementAndGet();
         logProductLine();
     }

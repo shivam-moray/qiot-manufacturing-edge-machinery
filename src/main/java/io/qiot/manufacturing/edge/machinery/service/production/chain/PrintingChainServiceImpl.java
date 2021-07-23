@@ -5,6 +5,7 @@ package io.qiot.manufacturing.edge.machinery.service.production.chain;
 
 import java.util.PrimitiveIterator;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -34,6 +35,11 @@ public class PrintingChainServiceImpl extends AbstractChainService {
     Event<StageCompletedEvent> event;
     
     private PrimitiveIterator.OfDouble printingRandomNumberGenerator;
+    
+    @PostConstruct
+    void init() {
+        super.init();
+    }
 
     @Override
     protected Logger getLogger() {
@@ -66,10 +72,5 @@ public class PrintingChainServiceImpl extends AbstractChainService {
         PrintingMetricsDTO metrics=new PrintingMetricsDTO();
         metrics.printing=printingRandomNumberGenerator.nextDouble();
         item.printingMetrics=metrics;
-        try {
-            Thread.sleep(2000L); 
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 }

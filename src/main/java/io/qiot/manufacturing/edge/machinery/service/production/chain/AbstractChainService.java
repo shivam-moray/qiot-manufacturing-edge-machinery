@@ -1,6 +1,7 @@
 package io.qiot.manufacturing.edge.machinery.service.production.chain;
 
 import java.util.Objects;
+import java.util.PrimitiveIterator;
 import java.util.UUID;
 
 import javax.enterprise.event.Event;
@@ -27,7 +28,14 @@ public abstract class AbstractChainService implements ChainService {
     @Inject
     protected RandomGeneratorProducer randomGeneratorProducer;
 
+    private PrimitiveIterator.OfLong sleepRandomNumberGenerator;
+
     protected UUID productLineId;
+
+    void init() {
+        sleepRandomNumberGenerator = randomGeneratorProducer
+                .longRandomNumberGenerator(1000, 3000);
+    }
 
     public void doSimulate() {
         ItemDTO item = poll(getStage());
@@ -45,6 +53,13 @@ public abstract class AbstractChainService implements ChainService {
         // return;
         // }
         item.stage = getStage();
+        try {
+            long sleepTime = sleepRandomNumberGenerator.nextLong();
+            getLogger().info("Sleeping for {} millis.", sleepTime);
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         generate(item);
         getLogger().info(
                 "{} process completed for Item #{} and Product Line #{}.",

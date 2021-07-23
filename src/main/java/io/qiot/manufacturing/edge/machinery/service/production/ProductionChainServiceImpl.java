@@ -47,7 +47,7 @@ public class ProductionChainServiceImpl implements ProductionChainService {
      * EVENTS
      */
 
-    @Scheduled(every = "3s")
+    @Scheduled(every = "2s")
     // @Override
     public void produce() {
         if (!productLineService.hasProductLine()) {
@@ -76,11 +76,17 @@ public class ProductionChainServiceImpl implements ProductionChainService {
     };
 
     void onValidationSuccessfull(@Observes ValidationSuccessfullEvent event) {
+        if (!conveyorBeltService.isValidItem(event.productLineId, event.itemId,
+                event.stage)) {
+            LOGGER.warn(
+                    "Received a validation result for an item not belonging "
+                            + "to the current production lifecycle. Discarding...");
+            return;
+        }
         ItemDTO item = conveyorBeltService.moveToNextStage(event.itemId,
                 event.stage);
         countersService.recordStageSuccess(item.id, item.productLineId,
                 item.stage);
-        conveyorBeltService.moveToNextStage(item.id, item.stage);
     };
 
     void onValidationFailed(@Observes ValidationFailedEvent event) {

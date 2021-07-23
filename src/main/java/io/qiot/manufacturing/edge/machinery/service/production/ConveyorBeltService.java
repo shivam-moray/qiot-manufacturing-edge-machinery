@@ -15,4 +15,6 @@ public interface ConveyorBeltService {
     ItemDTO dropItem(int itemId, ProductionChainStageEnum stage);
 
     ItemDTO moveToNextStage(int itemId, ProductionChainStageEnum stage);
+
+    boolean isValidItem(UUID productLineId, int itemId, ProductionChainStageEnum stage);
 }

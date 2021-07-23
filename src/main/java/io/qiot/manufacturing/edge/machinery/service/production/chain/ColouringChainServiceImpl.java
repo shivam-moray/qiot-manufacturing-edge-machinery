@@ -5,6 +5,7 @@ package io.qiot.manufacturing.edge.machinery.service.production.chain;
 
 import java.util.PrimitiveIterator;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -36,6 +37,11 @@ public class ColouringChainServiceImpl extends AbstractChainService {
     private PrimitiveIterator.OfInt redRandomNumberGenerator;
     private PrimitiveIterator.OfInt greenRandomNumberGenerator;
     private PrimitiveIterator.OfInt blueRandomNumberGenerator;
+    
+    @PostConstruct
+    void init() {
+        super.init();
+    }
 
     @Override
     protected Logger getLogger() {
@@ -67,15 +73,10 @@ public class ColouringChainServiceImpl extends AbstractChainService {
 
     @Override
     protected void generate(ItemDTO item) {
-        ColorMetricsDTO metrics = item.colorMetrics;
+        ColorMetricsDTO metrics = new ColorMetricsDTO();
         metrics.red = redRandomNumberGenerator.nextInt();
         metrics.green = greenRandomNumberGenerator.nextInt();
         metrics.blue = blueRandomNumberGenerator.nextInt();
         item.colorMetrics=metrics;
-        try {
-            Thread.sleep(2000L); 
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 }

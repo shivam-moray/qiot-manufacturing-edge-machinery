@@ -91,23 +91,26 @@ public class ValidationMessageConsumer implements Runnable {
     @Override
     public void run() {
         while (true) {
-            Message message = consumer.receive();
-            if (message == null)
-                return;
             try {
+            Message message = consumer.receive();
                 String messagePayload = message.getBody(String.class);
                 ValidationResponseDTO messageDTO = MAPPER
                         .readValue(messagePayload, ValidationResponseDTO.class);
+                LOGGER.info("Received validation result "
+                        + "for STAGE {} on ITEM {} / PRODUCTLINE {}",
+                        messageDTO.stage, messageDTO.itemId, messageDTO.productLineId);
                 if (messageDTO.valid) {
                     ValidationSuccessfullEvent event = new ValidationSuccessfullEvent();
                     event.productLineId = messageDTO.productLineId;
                     event.itemId = messageDTO.itemId;
                     event.stage = messageDTO.stage;
+                    successEvent.fire(event);
                 } else {
                     ValidationFailedEvent event = new ValidationFailedEvent();
                     event.productLineId = messageDTO.productLineId;
                     event.itemId = messageDTO.itemId;
                     event.stage = messageDTO.stage;
+                    failureEvent.fire(event);
                 }
             } catch (JMSException e) {
                 LOGGER.error(
@@ -117,6 +120,10 @@ public class ValidationMessageConsumer implements Runnable {
             } catch (JsonProcessingException e) {
                 LOGGER.error(
                         "The message payload is malformed and the validation request will not be sent: {}",
+                        e);
+            } catch (Exception e) {
+                LOGGER.error(
+                        "GENERIC ERROR",
                         e);
             }
         }

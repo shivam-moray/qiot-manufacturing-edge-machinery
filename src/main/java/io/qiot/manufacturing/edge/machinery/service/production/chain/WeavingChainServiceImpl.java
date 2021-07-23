@@ -5,6 +5,7 @@ package io.qiot.manufacturing.edge.machinery.service.production.chain;
 
 import java.util.PrimitiveIterator;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -38,6 +39,11 @@ public class WeavingChainServiceImpl extends AbstractChainService {
     private PrimitiveIterator.OfDouble backRandomNumberGenerator;
     private PrimitiveIterator.OfDouble waistRandomNumberGenerator;
     private PrimitiveIterator.OfDouble hipRandomNumberGenerator;
+    
+    @PostConstruct
+    void init() {
+        super.init();
+    }
 
     @Override
     protected Logger getLogger() {
@@ -78,11 +84,6 @@ public class WeavingChainServiceImpl extends AbstractChainService {
         metrics.waist = waistRandomNumberGenerator.nextDouble();
         metrics.hip = hipRandomNumberGenerator.nextDouble();
         item.sizeMetrics=metrics;
-        try {
-            Thread.sleep(2000L); 
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     

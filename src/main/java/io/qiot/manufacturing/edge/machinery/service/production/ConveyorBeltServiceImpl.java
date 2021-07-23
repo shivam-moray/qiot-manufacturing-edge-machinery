@@ -49,6 +49,23 @@ public class ConveyorBeltServiceImpl implements ConveyorBeltService {
     }
 
     @Override
+    public boolean isValidItem(UUID productLineId, int itemId,
+            ProductionChainStageEnum stage) {
+        switch (stage) {
+        case WEAVING:
+            return weavingUnderValidation.containsKey(itemId);
+        case COLORING:
+            return coloringUnderValidation.containsKey(itemId);
+        case PRINTING:
+            return printingUnderValidation.containsKey(itemId);
+        case PACKAGING:
+            return packagingUnderValidation.containsKey(itemId);
+        default:
+            throw new RuntimeException("Not yet implemented");
+        }
+    }
+
+    @Override
     public ItemDTO nextItemInQueue(ProductionChainStageEnum stage) {
         switch (stage) {
         case WEAVING:
@@ -102,21 +119,26 @@ public class ConveyorBeltServiceImpl implements ConveyorBeltService {
 
     @Override
     public ItemDTO moveToNextStage(int itemId, ProductionChainStageEnum stage) {
+        ItemDTO item = null;
         switch (stage) {
         case WEAVING:
-            coloringQueue.offer(weavingUnderValidation.remove(itemId));
+            item = weavingUnderValidation.remove(itemId);
+            coloringQueue.offer(item);
             break;
         case COLORING:
-            printingQueue.offer(coloringUnderValidation.remove(itemId));
+            item = coloringUnderValidation.remove(itemId);
+            printingQueue.offer(item);
             break;
         case PRINTING:
-            packagingQueue.offer(printingUnderValidation.remove(itemId));
+            item = printingUnderValidation.remove(itemId);
+            packagingQueue.offer(item);
             break;
         case PACKAGING:
-            return printingUnderValidation.remove(itemId);
+            item = packagingUnderValidation.remove(itemId);
+            break;
         default:
             throw new RuntimeException("Not yet implemented");
         }
-        return null;
+        return item;
     }
 }
