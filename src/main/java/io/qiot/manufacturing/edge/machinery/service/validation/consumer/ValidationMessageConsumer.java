@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.qiot.manufacturing.edge.machinery.domain.ValidationResponseDTO;
+import io.qiot.manufacturing.commons.domain.productionvalidation.ValidationResponseDTO;
 import io.qiot.manufacturing.edge.machinery.domain.event.BootstrapCompletedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;

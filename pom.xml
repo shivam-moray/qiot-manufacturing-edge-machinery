@@ -4,7 +4,7 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.qiot.manifacturing.edge</groupId>
+    <groupId>io.qiot.manufacturing.edge</groupId>
     <artifactId>machinery-service</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <properties>
@@ -42,18 +42,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
-<!--         <dependency> -->
-<!--             <groupId>io.quarkus</groupId> -->
-<!--             <artifactId> -->
-<!--                 quarkus-smallrye-reactive-messaging-mqtt -->
-<!--             </artifactId> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>io.quarkus</groupId> -->
-<!--             <artifactId> -->
-<!--                 quarkus-smallrye-reactive-messaging-amqp -->
-<!--             </artifactId> -->
-<!--         </dependency> -->
+        <dependency>
+            <groupId>io.qiot.manufacturing.all</groupId>
+            <artifactId>domain-model</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-artemis-jms</artifactId>

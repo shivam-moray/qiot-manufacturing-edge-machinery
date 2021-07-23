@@ -12,10 +12,10 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
+import io.qiot.manufacturing.commons.domain.production.ItemDTO;
+import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.commons.domain.production.SizeMetricsDTO;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEvent;
-import io.qiot.manufacturing.edge.machinery.domain.production.ItemDTO;
-import io.qiot.manufacturing.edge.machinery.domain.production.SizeMetricsDTO;
 import io.qiot.manufacturing.edge.machinery.domain.productline.ProductLineDTO;
 import io.quarkus.scheduler.Scheduled;
 

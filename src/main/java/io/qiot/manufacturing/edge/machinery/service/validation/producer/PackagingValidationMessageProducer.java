@@ -9,9 +9,8 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
-import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestPackagingValidationEvent;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestWeavingValidationEvent;
+import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.commons.domain.productionvalidation.PackagingValidationRequestEvent;
 
 @ApplicationScoped
 public class PackagingValidationMessageProducer
@@ -34,7 +33,7 @@ public class PackagingValidationMessageProducer
     }
 
     public void requestValidation(
-            @Observes RequestPackagingValidationEvent event) {
+            @Observes PackagingValidationRequestEvent event) {
         super.doRequestValidation(event);
     }
 

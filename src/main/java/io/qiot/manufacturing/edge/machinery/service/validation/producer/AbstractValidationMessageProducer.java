@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.AbstractValidationRequestEvent;
+import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEvent;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.util.producer.ReplyToQueueNameProducer;
 

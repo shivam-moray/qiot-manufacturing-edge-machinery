@@ -9,9 +9,8 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
-import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestColoringValidationEvent;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestWeavingValidationEvent;
+import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.commons.domain.productionvalidation.ColoringValidationRequestEvent;
 
 @ApplicationScoped
 public class ColoringValidationMessageProducer
@@ -34,7 +33,7 @@ public class ColoringValidationMessageProducer
     }
 
     public void requestValidation(
-            @Observes RequestColoringValidationEvent event) {
+            @Observes ColoringValidationRequestEvent event) {
         super.doRequestValidation(event);
     }
 

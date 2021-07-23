@@ -9,11 +9,10 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.qiot.manufacturing.edge.machinery.domain.ProductionChainStageEnum;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.RequestWeavingValidationEvent;
+import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEvent;
 
 @ApplicationScoped
 public class WeavingValidationMessageProducer
@@ -39,7 +38,7 @@ public class WeavingValidationMessageProducer
     }
 
     public void requestValidation(
-            @Observes RequestWeavingValidationEvent event) {
+            @Observes WeavingValidationRequestEvent event) {
 //        String payload;
 //        try {
 //            payload = MAPPER.writeValueAsString(event);
