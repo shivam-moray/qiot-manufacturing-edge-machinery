@@ -23,11 +23,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.commons.domain.productionvalidation.ValidationResponseDTO;
+import io.qiot.manufacturing.commons.util.producer.ReplyToQueueNameProducer;
 import io.qiot.manufacturing.edge.machinery.domain.event.BootstrapCompletedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
-import io.qiot.manufacturing.edge.machinery.util.producer.ReplyToQueueNameProducer;
 
 @ApplicationScoped
 public class ValidationMessageConsumer implements Runnable {
