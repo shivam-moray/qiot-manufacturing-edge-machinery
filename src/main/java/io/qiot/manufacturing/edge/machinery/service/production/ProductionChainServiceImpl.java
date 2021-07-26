@@ -60,10 +60,10 @@ public class ProductionChainServiceImpl implements ProductionChainService {
                 .getCurrentProductLine();
 
         int itemId = countersService
-                .recordNewItem(productLineDTO.productLineId);
+                .recordNewItem(productLineDTO.id);
 
         // setup new item
-        conveyorBeltService.createNewItem(productLineDTO.productLineId, itemId);
+        conveyorBeltService.createNewItem(productLineDTO.id, itemId);
 
     }
 

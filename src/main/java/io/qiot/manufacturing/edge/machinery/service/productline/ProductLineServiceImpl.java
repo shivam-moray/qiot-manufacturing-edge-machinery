@@ -84,7 +84,7 @@ class ProductLineServiceImpl implements ProductLineService {
         writeLock.lock();
         try {
             currentProductLine = event.productLine;
-            productLines.put(event.productLine.productLineId,
+            productLines.put(event.productLine.id,
                     event.productLine);
         } finally {
             writeLock.unlock();
