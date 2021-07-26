@@ -61,7 +61,7 @@ class ProductLineServiceImpl implements ProductLineService {
     void init() {
         if (ProfileManager.getActiveProfile()
                 .equals(LaunchMode.DEVELOPMENT.getDefaultProfile())) {
-            ProductLineDTO pl = productLineProducer.generateProductLine();
+            ProductLineDTO pl = productLineProducer.generate();
             ProductLineChangedEvent event = new ProductLineChangedEvent();
             event.productLine = pl;
             try {
