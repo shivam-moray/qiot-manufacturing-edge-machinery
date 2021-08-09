@@ -10,7 +10,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
-import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidationRequestEvent;
+import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidationRequestEventDTO;
 
 @ApplicationScoped
 public class PrintingValidationMessageProducer
@@ -33,7 +33,7 @@ public class PrintingValidationMessageProducer
     }
 
     public void requestValidation(
-            @Observes PrintingValidationRequestEvent event) {
+            @Observes PrintingValidationRequestEventDTO event) {
         super.doRequestValidation(event);
     }
 

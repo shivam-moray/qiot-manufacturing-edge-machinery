@@ -5,11 +5,11 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import io.qiot.manufacturing.commons.domain.production.ItemDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEvent;
-import io.qiot.manufacturing.commons.domain.productionvalidation.ColoringValidationRequestEvent;
-import io.qiot.manufacturing.commons.domain.productionvalidation.PackagingValidationRequestEvent;
-import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidationRequestEvent;
-import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEvent;
+import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
+import io.qiot.manufacturing.commons.domain.productionvalidation.ColoringValidationRequestEventDTO;
+import io.qiot.manufacturing.commons.domain.productionvalidation.PackagingValidationRequestEventDTO;
+import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidationRequestEventDTO;
+import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
 @ApplicationScoped
@@ -19,37 +19,37 @@ public class ValidationServiceImpl implements ValidationService {
     MachineryService machineryService;
 
     @Inject
-    Event<WeavingValidationRequestEvent> weavingValidationEvent;
+    Event<WeavingValidationRequestEventDTO> weavingValidationEvent;
     @Inject
-    Event<ColoringValidationRequestEvent> coloringValidationEvent;
+    Event<ColoringValidationRequestEventDTO> coloringValidationEvent;
     @Inject
-    Event<PrintingValidationRequestEvent> printingValidationEvent;
+    Event<PrintingValidationRequestEventDTO> printingValidationEvent;
     @Inject
-    Event<PackagingValidationRequestEvent> packagingValidationEvent;
+    Event<PackagingValidationRequestEventDTO> packagingValidationEvent;
 
     @Override
     public void validateItem(ItemDTO item) {
         switch (item.stage) {
         case WEAVING:
-            WeavingValidationRequestEvent wev = new WeavingValidationRequestEvent();
+            WeavingValidationRequestEventDTO wev = new WeavingValidationRequestEventDTO();
             abstractPopulate(wev, item);
             wev.data = item.sizeMetrics;
             weavingValidationEvent.fire(wev);
             return;
         case COLORING:
-            ColoringValidationRequestEvent cev = new ColoringValidationRequestEvent();
+            ColoringValidationRequestEventDTO cev = new ColoringValidationRequestEventDTO();
             abstractPopulate(cev, item);
             cev.data = item.colorMetrics;
             coloringValidationEvent.fire(cev);
             return;
         case PRINTING:
-            PrintingValidationRequestEvent prev = new PrintingValidationRequestEvent();
+            PrintingValidationRequestEventDTO prev = new PrintingValidationRequestEventDTO();
             abstractPopulate(prev, item);
             prev.data = item.printingMetrics;
             printingValidationEvent.fire(prev);
             return;
         case PACKAGING:
-            PackagingValidationRequestEvent paev = new PackagingValidationRequestEvent();
+            PackagingValidationRequestEventDTO paev = new PackagingValidationRequestEventDTO();
             abstractPopulate(paev, item);
             paev.data = item.packagingMetrics;
             packagingValidationEvent.fire(paev);
@@ -59,7 +59,7 @@ public class ValidationServiceImpl implements ValidationService {
         }
     }
 
-    private void abstractPopulate(AbstractValidationRequestEvent ev,
+    private void abstractPopulate(AbstractValidationRequestEventDTO ev,
             ItemDTO item) {
         ev.machineryId = machineryService.getMachineryId();
         ev.itemId = item.id;

@@ -1,4 +1,4 @@
-package io.qiot.manufacturing.edge.machinery.service.validation.consumer;
+package io.qiot.manufacturing.edge.machinery.service.productline;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -24,13 +24,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.commons.domain.event.BootstrapCompletedEventDTO;
 import io.qiot.manufacturing.commons.domain.productionvalidation.ValidationResponseDTO;
+import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
+import io.qiot.manufacturing.commons.util.producer.ProductLineReplyToQueueNameProducer;
 import io.qiot.manufacturing.commons.util.producer.ValidationReplyToQueueNameProducer;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
+import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
 @ApplicationScoped
-public class ValidationMessageConsumer implements Runnable {
+public class LatestProductLineMessageConsumer implements Runnable {
 
     @Inject
     Logger LOGGER;
@@ -45,13 +48,10 @@ public class ValidationMessageConsumer implements Runnable {
     MachineryService machineryService;
 
     @Inject
-    ValidationReplyToQueueNameProducer replyToQueueNameProducer;
+    ProductLineReplyToQueueNameProducer productLineReplyToQueueNameProducer;
 
     @Inject
-    Event<ValidationSuccessfullEvent> successEvent;
-
-    @Inject
-    Event<ValidationFailedEvent> failureEvent;
+    Event<ProductLineChangedEventDTO> prodictLineChangedEvent;
 
     private JMSContext context;
 
@@ -65,8 +65,24 @@ public class ValidationMessageConsumer implements Runnable {
             .newSingleThreadExecutor();
 
     void init(@Observes BootstrapCompletedEventDTO event) {
-        doInit();
+        LOGGER.info("Bootstrapping new product line durable subscriber...");
+        initSubscriber();
+
         scheduler.submit(this);
+        LOGGER.debug("Bootstrap completed");
+    }
+
+    private void initSubscriber() {
+        if (Objects.nonNull(context))
+            context.close();
+        context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE);
+
+        replyToQueueName = productLineReplyToQueueNameProducer
+                .getReplyToQueueName(machineryService.getMachineryId());
+
+        replyToQueue = context.createQueue(replyToQueueName);
+
+        consumer = context.createConsumer(replyToQueue);
     }
 
     @PreDestroy
@@ -75,57 +91,30 @@ public class ValidationMessageConsumer implements Runnable {
         context.close();
     }
 
-    private void doInit() {
-        if (Objects.nonNull(context))
-            context.close();
-        context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE);
-
-        replyToQueueName = replyToQueueNameProducer
-                .getReplyToQueueName(machineryService.getMachineryId());
-
-        replyToQueue = context.createQueue(replyToQueueName);
-
-        consumer = context.createConsumer(replyToQueue);
-    }
-
     @Override
     public void run() {
-        while (true) {
+//        while (true) {
             try {
-            Message message = consumer.receive();
+                Message message = consumer.receive();
                 String messagePayload = message.getBody(String.class);
-                ValidationResponseDTO messageDTO = MAPPER
-                        .readValue(messagePayload, ValidationResponseDTO.class);
-                LOGGER.info("Received validation result "
-                        + "for STAGE {} on ITEM {} / PRODUCTLINE {}",
-                        messageDTO.stage, messageDTO.itemId, messageDTO.productLineId);
-                if (messageDTO.valid) {
-                    ValidationSuccessfullEvent event = new ValidationSuccessfullEvent();
-                    event.productLineId = messageDTO.productLineId;
-                    event.itemId = messageDTO.itemId;
-                    event.stage = messageDTO.stage;
-                    successEvent.fire(event);
-                } else {
-                    ValidationFailedEvent event = new ValidationFailedEvent();
-                    event.productLineId = messageDTO.productLineId;
-                    event.itemId = messageDTO.itemId;
-                    event.stage = messageDTO.stage;
-                    failureEvent.fire(event);
-                }
+                ProductLineDTO productLine = MAPPER.readValue(messagePayload,
+                        ProductLineDTO.class);
+                LOGGER.info("Received latest PRODUCTLINE available from the Factory Controller: \n {}", productLine);
+                ProductLineChangedEventDTO eventDTO = new ProductLineChangedEventDTO();
+                eventDTO.productLine = productLine;
+                prodictLineChangedEvent.fire(eventDTO);
             } catch (JMSException e) {
                 LOGGER.error(
                         "The messaging client returned an error: {} and will be restarted.",
                         e);
-                doInit();
+                initSubscriber();
             } catch (JsonProcessingException e) {
                 LOGGER.error(
                         "The message payload is malformed and the validation request will not be sent: {}",
                         e);
             } catch (Exception e) {
-                LOGGER.error(
-                        "GENERIC ERROR",
-                        e);
+                LOGGER.error("GENERIC ERROR", e);
             }
-        }
+//        }
     }
 }

@@ -21,8 +21,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
-import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEvent;
-import io.qiot.manufacturing.commons.util.producer.ReplyToQueueNameProducer;
+import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
+import io.qiot.manufacturing.commons.util.producer.ValidationReplyToQueueNameProducer;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
 /**
@@ -38,7 +38,7 @@ public abstract class AbstractValidationMessageProducer {
     MachineryService machineryService;
 
     @Inject
-    ReplyToQueueNameProducer replyToQueueNameProducer;
+    ValidationReplyToQueueNameProducer replyToQueueNameProducer;
 
     @Inject
     ObjectMapper MAPPER;
@@ -69,7 +69,7 @@ public abstract class AbstractValidationMessageProducer {
         producer.setJMSReplyTo(replyToQueue);
     }
 
-    protected void doRequestValidation(AbstractValidationRequestEvent event) {
+    protected void doRequestValidation(AbstractValidationRequestEventDTO event) {
         getLogger().info("{} stage validation request received.", getStage());
         try {
             String payload = MAPPER.writeValueAsString(event);

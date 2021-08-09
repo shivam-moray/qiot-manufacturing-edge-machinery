@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
-import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEvent;
+import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEventDTO;
 
 @ApplicationScoped
 public class WeavingValidationMessageProducer
@@ -38,7 +38,7 @@ public class WeavingValidationMessageProducer
     }
 
     public void requestValidation(
-            @Observes WeavingValidationRequestEvent event) {
+            @Observes WeavingValidationRequestEventDTO event) {
 //        String payload;
 //        try {
 //            payload = MAPPER.writeValueAsString(event);

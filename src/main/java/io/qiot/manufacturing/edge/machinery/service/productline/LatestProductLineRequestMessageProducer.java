@@ -1,0 +1,80 @@
+/**
+ * 
+ */
+package io.qiot.manufacturing.edge.machinery.service.productline;
+
+import java.util.Objects;
+import java.util.UUID;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.JMSProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * @author andreabattaglia
+ *
+ */
+@ApplicationScoped
+public class LatestProductLineRequestMessageProducer {
+
+    @Inject
+    Logger LOGGER;
+
+    @Inject
+    ConnectionFactory connectionFactory;
+
+    @Inject
+    ObjectMapper MAPPER;
+
+    @ConfigProperty(name = "qiot.productline.request.queue-prefix")
+    String latestProductLineRequestQueueName;
+
+    private JMSContext context;
+
+    private JMSProducer producer;
+
+    private Queue queue;
+
+    @PostConstruct
+    void init() {
+        LOGGER.info(
+                "Bootstrapping latest product line request event producer...");
+        doInit();
+
+        LOGGER.info("Bootstrap completed");
+
+    }
+
+    private void doInit() {
+        if (Objects.nonNull(context))
+            context.close();
+        context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE);
+
+        producer = context.createProducer();
+
+        queue = context.createQueue(latestProductLineRequestQueueName);
+    }
+
+    void requestLatestProductLine(String machineryId) {
+        LOGGER.info(
+                "Sending out a request for the latest product line available");
+        try {
+            String messagePayload = machineryId;
+
+            producer.send(queue, messagePayload);
+        } catch (Exception e) {
+            LOGGER.error("GENERIC ERROR", e);
+        }
+
+    }
+}

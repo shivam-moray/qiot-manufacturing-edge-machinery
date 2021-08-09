@@ -1,13 +1,13 @@
 package io.qiot.manufacturing.edge.machinery.service.productline;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -18,11 +18,11 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.qiot.manufacturing.commons.domain.event.BootstrapCompletedEventDTO;
 import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
 import io.qiot.manufacturing.commons.util.producer.SampleProductLineProducer;
-import io.qiot.manufacturing.edge.machinery.domain.event.ProductLineChangedEvent;
-import io.quarkus.runtime.LaunchMode;
-import io.quarkus.runtime.configuration.ProfileManager;
+import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
+import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
 /**
  * @author andreabattaglia
@@ -48,47 +48,44 @@ class ProductLineServiceImpl implements ProductLineService {
     ObjectMapper MAPPER;
 
     @Inject
-    SampleProductLineProducer productLineProducer;
+    MachineryService machineryService;
 
-    public ProductLineServiceImpl() {
+    @Inject
+    LatestProductLineRequestMessageProducer latestProductLineRequestMessageProducer;
+
+    ProductLineServiceImpl() {
         productLines = new TreeMap<UUID, ProductLineDTO>();
         this.readWriteLock = new ReentrantReadWriteLock();
         this.readLock = readWriteLock.readLock();
         this.writeLock = readWriteLock.writeLock();
     }
 
-    @PostConstruct
-    void init() {
-        if (ProfileManager.getActiveProfile()
-                .equals(LaunchMode.DEVELOPMENT.getDefaultProfile())) {
-            ProductLineDTO pl = productLineProducer.generate();
-            ProductLineChangedEvent event = new ProductLineChangedEvent();
-            event.productLine = pl;
-            try {
-                newProductLine(event);
-            } catch (JsonProcessingException e) {
-            }
+    void onStart(@Observes BootstrapCompletedEventDTO event) {
+        latestProductLineRequestMessageProducer
+                .requestLatestProductLine(machineryService.getMachineryId());
+    }
+
+    void newProductLine(@Observes ProductLineChangedEventDTO event)
+            throws JsonProcessingException {
+        LOGGER.info("Received notification about a new Product Line:\n\n{}",
+                event.productLine.id);
+        ProductLineDTO productLine = event.productLine;
+        handleNewProductLine(productLine);
+    }
+
+    private void handleNewProductLine(ProductLineDTO productLine) {
+        writeLock.lock();
+        try {
+            currentProductLine = productLine;
+            productLines.put(productLine.id, productLine);
+        } finally {
+            writeLock.unlock();
         }
     }
 
     @Override
     public boolean hasProductLine() {
         return currentProductLine != null;
-    }
-
-    void newProductLine(@Observes ProductLineChangedEvent event)
-            throws JsonProcessingException {
-        LOGGER.info("Received new Product Line:\n\n{}",
-                MAPPER.writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(event.productLine));
-        writeLock.lock();
-        try {
-            currentProductLine = event.productLine;
-            productLines.put(event.productLine.id,
-                    event.productLine);
-        } finally {
-            writeLock.unlock();
-        }
     }
 
     @Override

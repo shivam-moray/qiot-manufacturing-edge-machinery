@@ -7,10 +7,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
 
 import org.slf4j.Logger;
 
-import io.qiot.manufacturing.edge.machinery.domain.event.BootstrapCompletedEvent;
+import io.qiot.manufacturing.commons.domain.event.BootstrapCompletedEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.service.production.ProductionChainService;
 import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
@@ -38,16 +39,17 @@ public class CoreServiceImpl implements CoreService {
     ProductionChainService productionChainService;
     
     @Inject
-    Event<BootstrapCompletedEvent> event;
-
-    // private StationDataBean stationData;
+    ConnectionFactory connectionFactory;
+    
+    @Inject
+    Event<BootstrapCompletedEventDTO> event;
 
     void onStart(@Observes StartupEvent ev) throws DataValidationException {
         LOGGER.info("The application is starting...{}");
         // stationData =
         scheduler.pause(); 
         machineryService.checkRegistration();
-        event.fire(new BootstrapCompletedEvent());
+        event.fire(new BootstrapCompletedEventDTO());
         scheduler.resume(); 
     }
 
