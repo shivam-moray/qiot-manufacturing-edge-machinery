@@ -9,6 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @RegisterForReflection
 public class ProductionCountersDTO {
     public UUID productLineId;

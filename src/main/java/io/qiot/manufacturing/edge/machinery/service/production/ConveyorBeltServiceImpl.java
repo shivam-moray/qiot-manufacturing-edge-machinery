@@ -12,6 +12,10 @@ import javax.enterprise.context.ApplicationScoped;
 import io.qiot.manufacturing.commons.domain.production.ItemDTO;
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class ConveyorBeltServiceImpl implements ConveyorBeltService {
 

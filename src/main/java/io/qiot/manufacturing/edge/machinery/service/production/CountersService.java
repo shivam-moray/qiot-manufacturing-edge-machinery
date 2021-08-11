@@ -4,6 +4,10 @@ import java.util.UUID;
 
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 public interface CountersService {
     int recordNewItem(UUID productLineId);
 

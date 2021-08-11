@@ -12,6 +12,10 @@ import org.slf4j.Logger;
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidationRequestEventDTO;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class PrintingValidationMessageProducer
         extends AbstractValidationMessageProducer {

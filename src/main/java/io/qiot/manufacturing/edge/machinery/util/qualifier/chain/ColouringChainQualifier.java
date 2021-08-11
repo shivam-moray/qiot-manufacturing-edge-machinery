@@ -7,6 +7,10 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER,

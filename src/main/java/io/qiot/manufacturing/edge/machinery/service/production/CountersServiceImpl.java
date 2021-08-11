@@ -15,6 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 import io.qiot.manufacturing.edge.machinery.domain.ProductionCountersDTO;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class CountersServiceImpl implements CountersService {
 

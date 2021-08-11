@@ -4,6 +4,10 @@ import java.util.UUID;
 
 import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 public interface ProductLineService {
 
     /**

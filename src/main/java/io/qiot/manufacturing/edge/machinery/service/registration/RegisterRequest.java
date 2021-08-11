@@ -7,6 +7,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "serial", "name", "longitude", "latitude",
         "keyStorePassword" })

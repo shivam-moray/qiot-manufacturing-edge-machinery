@@ -2,6 +2,10 @@ package io.qiot.manufacturing.edge.machinery.domain;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @RegisterForReflection
 public class MachineryDataDTO {
 

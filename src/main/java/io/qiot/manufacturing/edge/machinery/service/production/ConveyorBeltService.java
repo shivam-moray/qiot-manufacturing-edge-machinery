@@ -5,6 +5,10 @@ import java.util.UUID;
 import io.qiot.manufacturing.commons.domain.production.ItemDTO;
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 public interface ConveyorBeltService {
     void createNewItem(UUID productLineId, int itemId);
 

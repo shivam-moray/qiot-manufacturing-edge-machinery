@@ -55,7 +55,7 @@ public class MachineryServiceImpl implements MachineryService {
     public MachineryDataDTO checkRegistration() throws DataValidationException {
         Path dataFilePath = Paths.get(dataFilePathString);
         if (Files.exists(dataFilePath)) {
-            LOGGER.info(
+            LOGGER.debug(
                     "Device is already registered. Loading data from persistent volume...");
             try {
                 String datafileContent = Files.readString(dataFilePath);
@@ -67,9 +67,9 @@ public class MachineryServiceImpl implements MachineryService {
                         e);
                 throw new DataValidationException(e);
             }
-            LOGGER.info("Data loaded successfully: {}", machineryData);
+            LOGGER.debug("Data loaded successfully: {}", machineryData);
         } else {
-            LOGGER.info(
+            LOGGER.debug(
                     "Device is not registered. Stepping through the registration process...");
 
             machineryData = new MachineryDataDTO();
@@ -87,7 +87,7 @@ public class MachineryServiceImpl implements MachineryService {
 //                            ksPassword);
 //                }
 
-                LOGGER.info("Received machinery ID: {}", machineryId);
+                LOGGER.debug("Received machinery ID: {}", machineryId);
                 machineryData.id = machineryId;
                 Files.createFile(dataFilePath);
 
@@ -95,7 +95,7 @@ public class MachineryServiceImpl implements MachineryService {
                         .writeValueAsString(machineryData);
                 Files.writeString(dataFilePath, machineryDataString);
 
-                LOGGER.info("Data Created successfully: {}", machineryData);
+                LOGGER.debug("Data Created successfully: {}", machineryData);
             } catch (Exception e) {
                 LOGGER.error(
                         "An error occurred registering the measurement machinery.",

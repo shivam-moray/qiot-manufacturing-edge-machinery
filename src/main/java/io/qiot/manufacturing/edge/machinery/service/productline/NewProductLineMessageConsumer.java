@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -14,9 +13,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
-import javax.jms.JMSProducer;
 import javax.jms.Message;
-import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.Topic;
 
@@ -27,14 +24,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.commons.domain.event.BootstrapCompletedEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.ValidationResponseDTO;
 import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
-import io.qiot.manufacturing.commons.util.producer.ValidationReplyToQueueNameProducer;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class NewProductLineMessageConsumer implements Runnable {
 
@@ -66,7 +63,7 @@ public class NewProductLineMessageConsumer implements Runnable {
             .newSingleThreadExecutor();
 
     void init(@Observes BootstrapCompletedEventDTO event) {
-        LOGGER.info("Bootstrapping new product line durable subscriber...");
+        LOGGER.debug("Bootstrapping new product line durable subscriber...");
         initSubscriber();
 
         scheduler.submit(this);
@@ -100,7 +97,7 @@ public class NewProductLineMessageConsumer implements Runnable {
                 String messagePayload = message.getBody(String.class);
                 ProductLineDTO productLine = MAPPER.readValue(messagePayload,
                         ProductLineDTO.class);
-                LOGGER.info(
+                LOGGER.debug(
                         "Received new PRODUCTLINE from the Factory Controller: \n {}",
                         productLine);
                 ProductLineChangedEventDTO eventDTO = new ProductLineChangedEventDTO();

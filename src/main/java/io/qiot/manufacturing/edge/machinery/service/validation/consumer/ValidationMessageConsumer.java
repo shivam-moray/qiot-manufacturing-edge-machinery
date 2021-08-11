@@ -29,6 +29,10 @@ import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedE
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class ValidationMessageConsumer implements Runnable {
 
@@ -96,7 +100,7 @@ public class ValidationMessageConsumer implements Runnable {
                 String messagePayload = message.getBody(String.class);
                 ValidationResponseDTO messageDTO = MAPPER
                         .readValue(messagePayload, ValidationResponseDTO.class);
-                LOGGER.info("Received validation result "
+                LOGGER.debug("Received validation result "
                         + "for STAGE {} on ITEM {} / PRODUCTLINE {}",
                         messageDTO.stage, messageDTO.itemId, messageDTO.productLineId);
                 if (messageDTO.valid) {

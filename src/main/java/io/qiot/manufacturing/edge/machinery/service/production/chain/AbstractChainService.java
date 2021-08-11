@@ -17,6 +17,10 @@ import io.qiot.manufacturing.edge.machinery.domain.event.chain.StageCompletedEve
 import io.qiot.manufacturing.edge.machinery.service.production.ConveyorBeltService;
 import io.qiot.manufacturing.edge.machinery.service.productline.ProductLineService;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 public abstract class AbstractChainService implements ChainService {
 
     @Inject
@@ -40,28 +44,28 @@ public abstract class AbstractChainService implements ChainService {
     public void doSimulate() {
         ItemDTO item = poll(getStage());
         if (Objects.isNull(item)) {
-            getLogger().info("No items available in conveyor belt for stage {}",
+            getLogger().debug("No items available in conveyor belt for stage {}",
                     getStage());
             return;
         }
-        getLogger().info(
+        getLogger().debug(
                 "{} process started for Item #{} and Product Line #{}.",
                 getStage(), item.id, item.productLineId);
         checkProductLineId(item.productLineId);
         // if (Objects.isNull(item.productLineId)) {
-        // getLogger().info("No Product Line available.");
+        // getLogger().debug("No Product Line available.");
         // return;
         // }
         item.stage = getStage();
         try {
             long sleepTime = sleepRandomNumberGenerator.nextLong();
-            getLogger().info("Sleeping for {} millis.", sleepTime);
+            getLogger().debug("Sleeping for {} millis.", sleepTime);
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         generate(item);
-        getLogger().info(
+        getLogger().debug(
                 "{} process completed for Item #{} and Product Line #{}.",
                 getStage(), item.id, item.productLineId);
         notify(item);

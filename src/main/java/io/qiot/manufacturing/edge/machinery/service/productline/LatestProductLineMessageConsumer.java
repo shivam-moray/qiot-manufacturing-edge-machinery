@@ -23,15 +23,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.commons.domain.event.BootstrapCompletedEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.ValidationResponseDTO;
 import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
 import io.qiot.manufacturing.commons.util.producer.ProductLineReplyToQueueNameProducer;
-import io.qiot.manufacturing.commons.util.producer.ValidationReplyToQueueNameProducer;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
-import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class LatestProductLineMessageConsumer implements Runnable {
 
@@ -65,7 +65,7 @@ public class LatestProductLineMessageConsumer implements Runnable {
             .newSingleThreadExecutor();
 
     void init(@Observes BootstrapCompletedEventDTO event) {
-        LOGGER.info("Bootstrapping new product line durable subscriber...");
+        LOGGER.debug("Bootstrapping new product line durable subscriber...");
         initSubscriber();
 
         scheduler.submit(this);
@@ -99,7 +99,7 @@ public class LatestProductLineMessageConsumer implements Runnable {
                 String messagePayload = message.getBody(String.class);
                 ProductLineDTO productLine = MAPPER.readValue(messagePayload,
                         ProductLineDTO.class);
-                LOGGER.info("Received latest PRODUCTLINE available from the Factory Controller: \n {}", productLine);
+                LOGGER.debug("Received latest PRODUCTLINE available from the Factory Controller: \n {}", productLine);
                 ProductLineChangedEventDTO eventDTO = new ProductLineChangedEventDTO();
                 eventDTO.productLine = productLine;
                 prodictLineChangedEvent.fire(eventDTO);

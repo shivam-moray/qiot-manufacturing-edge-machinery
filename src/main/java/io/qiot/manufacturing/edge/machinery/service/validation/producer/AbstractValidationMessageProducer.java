@@ -70,10 +70,10 @@ public abstract class AbstractValidationMessageProducer {
     }
 
     protected void doRequestValidation(AbstractValidationRequestEventDTO event) {
-        getLogger().info("{} stage validation request received.", getStage());
+        getLogger().debug("{} stage validation request received.", getStage());
         try {
             String payload = MAPPER.writeValueAsString(event);
-          getLogger().info("Message payload: {}", payload);
+          getLogger().debug("Message payload: {}", payload);
             TextMessage message = context.createTextMessage();
             message.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
             message.setText(payload);

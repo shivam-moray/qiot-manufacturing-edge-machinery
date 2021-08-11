@@ -14,6 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
 import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEventDTO;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class WeavingValidationMessageProducer
         extends AbstractValidationMessageProducer {
@@ -42,7 +46,7 @@ public class WeavingValidationMessageProducer
 //        String payload;
 //        try {
 //            payload = MAPPER.writeValueAsString(event);
-//        getLogger().info("Message payload: {}", payload);
+//        getLogger().debug("Message payload: {}", payload);
 //        } catch (JsonProcessingException e) {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();

@@ -45,7 +45,7 @@ public class CoreServiceImpl implements CoreService {
     Event<BootstrapCompletedEventDTO> event;
 
     void onStart(@Observes StartupEvent ev) throws DataValidationException {
-        LOGGER.info("The application is starting...{}");
+        LOGGER.debug("The application is starting...{}");
         // stationData =
         scheduler.pause(); 
         machineryService.checkRegistration();

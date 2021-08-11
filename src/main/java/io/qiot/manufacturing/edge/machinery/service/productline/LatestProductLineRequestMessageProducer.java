@@ -4,7 +4,6 @@
 package io.qiot.manufacturing.edge.machinery.service.productline;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -47,11 +46,11 @@ public class LatestProductLineRequestMessageProducer {
 
     @PostConstruct
     void init() {
-        LOGGER.info(
+        LOGGER.debug(
                 "Bootstrapping latest product line request event producer...");
         doInit();
 
-        LOGGER.info("Bootstrap completed");
+        LOGGER.debug("Bootstrap completed");
 
     }
 
@@ -66,7 +65,7 @@ public class LatestProductLineRequestMessageProducer {
     }
 
     void requestLatestProductLine(String machineryId) {
-        LOGGER.info(
+        LOGGER.debug(
                 "Sending out a request for the latest product line available");
         try {
             String messagePayload = machineryId;

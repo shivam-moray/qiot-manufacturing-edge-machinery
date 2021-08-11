@@ -12,6 +12,10 @@ import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidat
 import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 
+/**
+ * @author andreabattaglia
+ *
+ */
 @ApplicationScoped
 public class ValidationServiceImpl implements ValidationService {
 

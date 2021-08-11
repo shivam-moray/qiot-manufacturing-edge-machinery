@@ -67,7 +67,7 @@ public class ProductionChainServiceImpl implements ProductionChainService {
     }
 
     void onStageCompleted(@Observes StageCompletedEvent event) {
-        LOGGER.info("Recording changes and notifying...");
+        LOGGER.debug("Recording changes and notifying...");
         ItemDTO item = event.item;
         countersService.recordStageEnd(item.id, item.productLineId, item.stage);
         conveyorBeltService.moveToWaitingQueue(item);

@@ -51,7 +51,7 @@
 //            registerResponse = registrationClient.register(registerRequest);
 //            LOGGER.debug("Registratior process results: {}", registerResponse);
 //
-//            LOGGER.info("Acquired stationID: {}", registerResponse.id);
+//            LOGGER.debug("Acquired stationID: {}", registerResponse.id);
 //            String encodedTSString = registerResponse.truststore;
 //            String encodedKSString = registerResponse.keystore;
 //
