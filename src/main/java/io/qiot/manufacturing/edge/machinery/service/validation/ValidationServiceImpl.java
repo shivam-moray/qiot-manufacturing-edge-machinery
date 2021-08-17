@@ -4,7 +4,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import io.qiot.manufacturing.commons.domain.production.ItemDTO;
+import io.qiot.manufacturing.all.commons.domain.production.ItemDTO;
 import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
 import io.qiot.manufacturing.commons.domain.productionvalidation.ColoringValidationRequestEventDTO;
 import io.qiot.manufacturing.commons.domain.productionvalidation.PackagingValidationRequestEventDTO;

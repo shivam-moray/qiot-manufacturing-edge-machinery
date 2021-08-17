@@ -1,6 +1,7 @@
 package io.qiot.manufacturing.edge.machinery.service.productline;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
@@ -17,9 +18,8 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.qiot.manufacturing.commons.domain.event.BootstrapCompletedEventDTO;
-import io.qiot.manufacturing.commons.domain.productline.GlobalProductLineDTO;
-import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
+import io.qiot.manufacturing.all.commons.domain.event.BootstrapCompletedEventDTO;
+import io.qiot.manufacturing.all.commons.domain.productline.ProductLineDTO;
 import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -29,7 +29,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  *
  */
 @ApplicationScoped
-@RegisterForReflection(targets={ GlobalProductLineDTO.class, ProductLineDTO.class})
+@RegisterForReflection(targets={ ProductLineDTO.class})
 class ProductLineServiceImpl implements ProductLineService {
 
     private ReadWriteLock readWriteLock;
@@ -68,6 +68,8 @@ class ProductLineServiceImpl implements ProductLineService {
 
     void newProductLine(@Observes ProductLineChangedEventDTO event)
             throws JsonProcessingException {
+        if(Objects.isNull(event.productLine))
+            return;
         LOGGER.debug("Received notification about a new Product Line:\n\n{}",
                 event.productLine.id);
         ProductLineDTO productLine = event.productLine;

@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.all.commons.domain.production.ProductionChainStageEnum;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /**

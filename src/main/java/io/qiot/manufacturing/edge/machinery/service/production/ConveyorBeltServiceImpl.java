@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import io.qiot.manufacturing.commons.domain.production.ItemDTO;
-import io.qiot.manufacturing.commons.domain.production.ProductionChainStageEnum;
+import io.qiot.manufacturing.all.commons.domain.production.ItemDTO;
+import io.qiot.manufacturing.all.commons.domain.production.ProductionChainStageEnum;
 
 /**
  * @author andreabattaglia

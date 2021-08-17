@@ -2,7 +2,7 @@ package io.qiot.manufacturing.edge.machinery.service.productline;
 
 import java.util.UUID;
 
-import io.qiot.manufacturing.commons.domain.productline.ProductLineDTO;
+import io.qiot.manufacturing.all.commons.domain.productline.ProductLineDTO;
 
 /**
  * @author andreabattaglia
