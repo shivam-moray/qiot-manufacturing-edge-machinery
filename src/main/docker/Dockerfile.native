@@ -21,6 +21,12 @@ RUN chown 1001 /work \
     && chown 1001:root /work
 COPY --chown=1001:root target/*-runner /work/application
 
+# QIoT
+RUN mkdir -p /var/data/qiot/ \
+  && chown -R 1001 /var/data/qiot \
+  && chmod -R "g+rwX" /var/data/qiot \
+  && chown -R 1001:root /var/data/qiot
+
 EXPOSE 8080
 USER 1001
 
