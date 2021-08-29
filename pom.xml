@@ -6,6 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.qiot.manufacturing.edge</groupId>
     <artifactId>machinery-service</artifactId>
+    <version>1.0.0.alpha6-SNAPSHOT</version>
     <parent>
         <groupId>io.qiot.manufacturing</groupId>
         <artifactId>parent</artifactId>
@@ -74,22 +75,22 @@
         <dependency>
             <groupId>io.qiot.manufacturing.all</groupId>
             <artifactId>domain-model</artifactId>
-<!--             <version>1.0.0.alpha6-SNAPSHOT</version> -->
+            <version>1.0.0.alpha6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.qiot.manufacturing.factory</groupId>
             <artifactId>domain-model</artifactId>
-<!--             <version>1.0.0.alpha6-SNAPSHOT</version> -->
+            <version>1.0.0.alpha6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.qiot.manufacturing.all</groupId>
             <artifactId>utilities</artifactId>
-<!--             <version>1.0.0.alpha6-SNAPSHOT</version> -->
+            <version>1.0.0.alpha6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.qiot.manufacturing.factory</groupId>
             <artifactId>utilities</artifactId>
-<!--             <version>1.0.0.alpha6-SNAPSHOT</version> -->
+            <version>1.0.0.alpha6-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <profiles>
