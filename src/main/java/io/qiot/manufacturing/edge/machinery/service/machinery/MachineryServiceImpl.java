@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.qiot.manufacturing.all.commons.exception.DataValidationException;
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
-import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
 import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.configuration.ProfileManager;
 

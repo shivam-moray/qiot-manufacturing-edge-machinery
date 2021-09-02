@@ -1,7 +1,7 @@
 package io.qiot.manufacturing.edge.machinery.service.machinery;
 
+import io.qiot.manufacturing.all.commons.exception.DataValidationException;
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
-import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
 
 /**
  * @author andreabattaglia

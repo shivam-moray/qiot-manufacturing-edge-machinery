@@ -12,9 +12,9 @@ import javax.jms.ConnectionFactory;
 import org.slf4j.Logger;
 
 import io.qiot.manufacturing.all.commons.domain.event.BootstrapCompletedEventDTO;
+import io.qiot.manufacturing.all.commons.exception.DataValidationException;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.service.production.ProductionChainService;
-import io.qiot.manufacturing.edge.machinery.util.exception.DataValidationException;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduler;
 
