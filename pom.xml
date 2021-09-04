@@ -37,28 +37,46 @@
         </repository>
     </repositories>
     <dependencies>
+        <!-- QUARKUS -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
+        <!-- COMMONS -->
+        <dependency>
+            <groupId>io.qiot.manufacturing.all</groupId>
+            <artifactId>domain-model</artifactId>
+            <version>1.0.0.alpha7-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qiot.manufacturing.factory</groupId>
+            <artifactId>domain-model</artifactId>
+            <version>1.0.0.alpha7-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qiot.manufacturing.all</groupId>
+            <artifactId>utilities</artifactId>
+            <version>1.0.0.alpha7-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qiot.manufacturing.factory</groupId>
+            <artifactId>utilities</artifactId>
+            <version>1.0.0.alpha7-SNAPSHOT</version>
+        </dependency>
+        <!-- REST CLIENT -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jackson</artifactId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
-
+        <!-- JMS -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-artemis-jms</artifactId>
         </dependency>
-
+        <!-- SCHEDULER -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-scheduler</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-container-image-jib</artifactId>
         </dependency>
 
         <!-- TEST -->
@@ -71,26 +89,6 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.qiot.manufacturing.all</groupId>
-            <artifactId>domain-model</artifactId>
-            <version>1.0.0.alpha7-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>io.qiot.manufacturing.factory</groupId>
-            <artifactId>domain-model</artifactId>
-            <version>1.0.0.alpha7-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>io.qiot.manufacturing.all</groupId>
-            <artifactId>utilities</artifactId>
-            <version>1.0.0.alpha7-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>io.qiot.manufacturing.factory</groupId>
-            <artifactId>utilities</artifactId>
-            <version>1.0.0.alpha7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <profiles>

@@ -3,11 +3,13 @@
  */
 package io.qiot.manufacturing.edge.machinery.service.machinery;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -17,9 +19,9 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.all.commons.exception.DataValidationException;
+import io.qiot.manufacturing.all.commons.exception.SubscriptionException;
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
-import io.quarkus.runtime.LaunchMode;
-import io.quarkus.runtime.configuration.ProfileManager;
+import io.qiot.manufacturing.edge.machinery.service.registration.RegistrationService;
 
 /**
  * @author andreabattaglia
@@ -37,8 +39,11 @@ public class MachineryServiceImpl implements MachineryService {
     @Inject
     ObjectMapper MAPPER;
 
-//    @Inject
-//    RegistrationService registrationService;
+    @Inject
+    RegistrationService registrationService;
+
+    @ConfigProperty(name = "qiot.data.reset")
+    boolean DO_RESET;
 
     @ConfigProperty(name = "qiot.machinery.serial")
     String MACHINERY_SERIAL;
@@ -50,9 +55,30 @@ public class MachineryServiceImpl implements MachineryService {
     @ConfigProperty(name = "qiot.mqtts.ts.password")
     String tsPassword;
 
+    private Path dataFilePath;
     private MachineryDataDTO machineryData;
 
-    public MachineryDataDTO checkRegistration() throws DataValidationException {
+    @PostConstruct
+    void init() {
+        dataFilePath = Paths.get(dataFilePathString);
+        if (DO_RESET)
+            resetFactoryData();
+    }
+
+    private void resetFactoryData() {
+        try {
+            if (!Files.deleteIfExists(dataFilePath))
+                LOGGER.debug(
+                        "Machinery data file does not exists. Nothing to delete");
+        } catch (IOException e) {
+            LOGGER.error("Failed resetting Factory data: {}",
+                    dataFilePathString);
+        }
+        registrationService.resetFactoryData();
+    }
+
+    public MachineryDataDTO checkRegistration()
+            throws DataValidationException, SubscriptionException {
         Path dataFilePath = Paths.get(dataFilePathString);
         if (Files.exists(dataFilePath)) {
             LOGGER.debug(
@@ -75,33 +101,30 @@ public class MachineryServiceImpl implements MachineryService {
             machineryData = new MachineryDataDTO();
             machineryData.serial = MACHINERY_SERIAL;
             machineryData.name = MACHINERY_NAME;
-            try {
-                String machineryId = null;
-                if (ProfileManager.getActiveProfile()
-                        .equals(LaunchMode.DEVELOPMENT.getDefaultProfile())) {
-                    machineryId = UUID.randomUUID().toString();
-                }
-//                else
-//                    machineryId = registrationService.register(
-//                            machineryData.serial, machineryData.name,
-//                            ksPassword);
-//                }
+            UUID machineryId = null;
+            // if (ProfileManager.getActiveProfile()
+            // .equals(LaunchMode.DEVELOPMENT.getDefaultProfile())) {
+            // machineryId = UUID.randomUUID().toString();
+            // }
+            // else
+            machineryId = registrationService.register(machineryData.serial,
+                    machineryData.name, ksPassword);
 
-                LOGGER.debug("Received machinery ID: {}", machineryId);
-                machineryData.id = machineryId;
+            machineryData.id = machineryId.toString();
+
+            LOGGER.debug("Received machinery ID: {}", machineryId);
+            try {
                 Files.createFile(dataFilePath);
 
-                String machineryDataString = MAPPER
+                String factoryDataString = MAPPER
                         .writeValueAsString(machineryData);
-                Files.writeString(dataFilePath, machineryDataString);
-
-                LOGGER.debug("Data Created successfully: {}", machineryData);
+                Files.writeString(dataFilePath, factoryDataString);
             } catch (Exception e) {
-                LOGGER.error(
-                        "An error occurred registering the measurement machinery.",
-                        e);
+                LOGGER.error("An error occurred saving data to volume.", e);
                 throw new DataValidationException(e);
             }
+
+            LOGGER.debug("Data Created successfully: {}", machineryData);
         }
         return machineryData;
     }

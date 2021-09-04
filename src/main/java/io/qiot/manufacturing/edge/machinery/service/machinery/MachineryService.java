@@ -1,6 +1,9 @@
 package io.qiot.manufacturing.edge.machinery.service.machinery;
 
+import java.util.UUID;
+
 import io.qiot.manufacturing.all.commons.exception.DataValidationException;
+import io.qiot.manufacturing.all.commons.exception.SubscriptionException;
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
 
 /**
@@ -9,7 +12,8 @@ import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
  */
 public interface MachineryService {
 
-    MachineryDataDTO checkRegistration() throws DataValidationException;
+    MachineryDataDTO checkRegistration()
+            throws DataValidationException, SubscriptionException;
 
     String getMachineryId();
 

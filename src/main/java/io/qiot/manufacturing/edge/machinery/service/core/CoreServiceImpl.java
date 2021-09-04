@@ -12,7 +12,6 @@ import javax.jms.ConnectionFactory;
 import org.slf4j.Logger;
 
 import io.qiot.manufacturing.all.commons.domain.event.BootstrapCompletedEventDTO;
-import io.qiot.manufacturing.all.commons.exception.DataValidationException;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.edge.machinery.service.production.ProductionChainService;
 import io.quarkus.runtime.StartupEvent;
@@ -22,7 +21,7 @@ import io.quarkus.scheduler.Scheduler;
  * @author andreabattaglia
  *
  */
-//@Startup(1)
+// @Startup(1)
 @ApplicationScoped
 public class CoreServiceImpl implements CoreService {
 
@@ -37,29 +36,28 @@ public class CoreServiceImpl implements CoreService {
 
     @Inject
     ProductionChainService productionChainService;
-    
+
     @Inject
     ConnectionFactory connectionFactory;
-    
+
     @Inject
     Event<BootstrapCompletedEventDTO> event;
 
-    void onStart(@Observes StartupEvent ev) throws DataValidationException {
+    void onStart(@Observes StartupEvent ev) throws Exception {
         LOGGER.debug("The application is starting...{}");
-        // stationData =
-        scheduler.pause(); 
+        scheduler.pause();
         machineryService.checkRegistration();
         event.fire(new BootstrapCompletedEventDTO());
-        scheduler.resume(); 
+        scheduler.resume();
     }
 
     void ping() {
-       scheduler.pause(); 
-       scheduler.pause("myIdentity"); 
-       if (scheduler.isRunning()) {
-          throw new IllegalStateException("This should never happen!");
-       }
-       scheduler.resume("myIdentity"); 
-       scheduler.resume(); 
+        scheduler.pause();
+        scheduler.pause("myIdentity");
+        if (scheduler.isRunning()) {
+            throw new IllegalStateException("This should never happen!");
+        }
+        scheduler.resume("myIdentity");
+        scheduler.resume();
     }
 }
