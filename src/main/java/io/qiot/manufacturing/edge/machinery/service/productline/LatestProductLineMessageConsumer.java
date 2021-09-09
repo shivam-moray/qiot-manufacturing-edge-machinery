@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.qiot.manufacturing.all.commons.domain.event.BootstrapCompletedEventDTO;
+import io.qiot.manufacturing.all.commons.domain.cdi.BootstrapCompletedEventDTO;
 import io.qiot.manufacturing.all.commons.domain.productline.ProductLineDTO;
 import io.qiot.manufacturing.commons.util.producer.ProductLineReplyToQueueNameProducer;
 import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
