@@ -50,9 +50,9 @@ public class MachineryServiceImpl implements MachineryService {
     @ConfigProperty(name = "qiot.machinery.name")
     String MACHINERY_NAME;
 
-    @ConfigProperty(name = "qiot.mqtts.ks.password")
+    @ConfigProperty(name = "qiot.runtime.ks.password")
     String ksPassword;
-    @ConfigProperty(name = "qiot.mqtts.ts.password")
+    @ConfigProperty(name = "qiot.runtime.ts.password")
     String tsPassword;
 
     private Path dataFilePath;

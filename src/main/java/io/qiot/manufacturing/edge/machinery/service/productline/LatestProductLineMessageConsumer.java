@@ -24,9 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.all.commons.domain.cdi.BootstrapCompletedEventDTO;
 import io.qiot.manufacturing.all.commons.domain.productline.ProductLineDTO;
-import io.qiot.manufacturing.commons.util.producer.ProductLineReplyToQueueNameProducer;
 import io.qiot.manufacturing.edge.machinery.domain.event.productline.ProductLineChangedEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
+import io.qiot.manufacturing.factory.commons.util.producer.ProductLineReplyToQueueNameProducer;
 
 /**
  * @author andreabattaglia
