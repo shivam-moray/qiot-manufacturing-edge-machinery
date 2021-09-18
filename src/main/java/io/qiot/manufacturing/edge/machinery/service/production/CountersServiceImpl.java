@@ -11,15 +11,21 @@ import org.slf4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.std.StdJdkSerializers;
 
 import io.qiot.manufacturing.all.commons.domain.production.ProductionChainStageEnum;
 import io.qiot.manufacturing.edge.machinery.domain.ProductionCountersDTO;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /**
  * @author andreabattaglia
  *
  */
 @ApplicationScoped
+@RegisterForReflection(targets = {
+        StdJdkSerializers.AtomicIntegerSerializer.class,
+        StdJdkSerializers.AtomicBooleanSerializer.class,
+        StdJdkSerializers.AtomicLongSerializer.class })
 public class CountersServiceImpl implements CountersService {
 
     @Inject
@@ -33,6 +39,11 @@ public class CountersServiceImpl implements CountersService {
     public CountersServiceImpl() {
 
         productionCounters = new TreeMap<UUID, ProductionCountersDTO>();
+    }
+    
+    @Override
+    public Map<UUID, ProductionCountersDTO> getCounters(){
+        return productionCounters;
     }
 
     @Override
@@ -101,12 +112,15 @@ public class CountersServiceImpl implements CountersService {
     }
 
     void logProductLine() {
-        try {
-            String json = MAPPER.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(productionCounters);
-            LOGGER.info("Production summary:\n\n{}", json);
-        } catch (JsonProcessingException e) {
-            LOGGER.error("an error occurred printing the production summary.");
-        }
+        if (LOGGER.isDebugEnabled())
+            try {
+                String json = MAPPER.writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(productionCounters);
+                LOGGER.info("Production summary:\n\n{}", json);
+            } catch (JsonProcessingException e) {
+                LOGGER.error(
+                        "An error occurred printing the production summary.",
+                        e);
+            }
     }
 }

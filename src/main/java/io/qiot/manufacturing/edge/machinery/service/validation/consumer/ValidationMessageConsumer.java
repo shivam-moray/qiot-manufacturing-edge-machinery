@@ -23,10 +23,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.all.commons.domain.cdi.BootstrapCompletedEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.ValidationResponseDTO;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationFailedEvent;
 import io.qiot.manufacturing.edge.machinery.domain.event.chain.ValidationSuccessfullEvent;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.ValidationResponseDTO;
 import io.qiot.manufacturing.factory.commons.util.producer.ValidationReplyToQueueNameProducer;
 
 /**

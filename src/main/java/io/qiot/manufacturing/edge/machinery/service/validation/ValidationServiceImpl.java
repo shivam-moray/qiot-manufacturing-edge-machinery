@@ -5,12 +5,12 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import io.qiot.manufacturing.all.commons.domain.production.ItemDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.ColoringValidationRequestEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.PackagingValidationRequestEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.PrintingValidationRequestEventDTO;
-import io.qiot.manufacturing.commons.domain.productionvalidation.WeavingValidationRequestEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.ColoringValidationRequestEventDTO;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.PackagingValidationRequestEventDTO;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.PrintingValidationRequestEventDTO;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.WeavingValidationRequestEventDTO;
 
 /**
  * @author andreabattaglia

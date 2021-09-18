@@ -21,8 +21,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.manufacturing.all.commons.domain.production.ProductionChainStageEnum;
-import io.qiot.manufacturing.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
+import io.qiot.manufacturing.factory.commons.domain.productionvalidation.AbstractValidationRequestEventDTO;
 import io.qiot.manufacturing.factory.commons.util.producer.ValidationReplyToQueueNameProducer;
 
 /**

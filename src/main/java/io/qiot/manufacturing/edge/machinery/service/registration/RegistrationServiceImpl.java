@@ -16,15 +16,23 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+
 import io.qiot.manufacturing.all.commons.domain.landscape.SubscriptionResponse;
 import io.qiot.manufacturing.all.commons.exception.SubscriptionException;
-import io.qiot.manufacturing.commons.domain.registration.EdgeSubscriptionRequest;
 import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
+import io.qiot.manufacturing.factory.commons.domain.registration.EdgeSubscriptionRequest;
 
 @ApplicationScoped
 public class RegistrationServiceImpl implements RegistrationService {
     @Inject
     Logger LOGGER;
+    
+    @Inject
+    ObjectMapper MAPPER;
 
     @ConfigProperty(name = "qiot.runtime.ks.path")
     String ksPathString;
@@ -41,36 +49,64 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public UUID register(String serial, String name, String ksPassword)
             throws SubscriptionException {
-        SubscriptionResponse subscriptionResponse = null;
         EdgeSubscriptionRequest registerRequest = null;
+        SubscriptionResponse subscriptionResponse = null;
+        
         registerRequest = new EdgeSubscriptionRequest();
         registerRequest.serial = serial;
         registerRequest.name = name;
         registerRequest.keyStorePassword = ksPassword;
+        
+        try {
+            String jsonTest=MAPPER.writeValueAsString(registerRequest);
+            LOGGER.debug(
+                    "Serialized value: {}",
+                    jsonTest);
+            EdgeSubscriptionRequest registerRequestTest=MAPPER.readValue(jsonTest, EdgeSubscriptionRequest.class);
+            LOGGER.debug(
+                    "Deserialized value: {}",
+                    registerRequestTest);
+        } catch (JsonProcessingException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
+        
 
         LOGGER.debug(
                 "Attempting subscription process with the following data: {}",
                 registerRequest);
 
-        while (subscriptionResponse == null) {
-            // TODO: put sleep time in application.properties
-            long sleepTime = 2000;
+//        while (subscriptionResponse == null) {
+//            // TODO: put sleep time in application.properties
+//            long sleepTime = 2000;
+//            try {
+//
+//                subscriptionResponse = facilityManagerClient
+//                        .subscribeMachinery(registerRequest);
+//            } catch (Exception e) {
+//                LOGGER.info(
+//                        "An error occurred registering the machinery. "
+//                                + "Retrying in {} millis.\n Error message: {}",
+//                        sleepTime, e.getMessage());
+//                try {
+//                    Thread.sleep(sleepTime);
+//                } catch (InterruptedException ie) {
+//                    Thread.currentThread().interrupt();
+//                }
+//            }
+//        }
+        
             try {
 
                 subscriptionResponse = facilityManagerClient
                         .subscribeMachinery(registerRequest);
             } catch (Exception e) {
                 LOGGER.info(
-                        "An error occurred registering the machinery. "
-                                + "Retrying in {} millis.\n Error message: {}",
-                        sleepTime, e.getMessage());
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                }
+                        "An error occurred registering the machinery. \n Error message: {}",
+                         e.getMessage());
+                throw new SubscriptionException(e);
             }
-        }
 
         LOGGER.debug("Registratior process results: {}", subscriptionResponse);
 

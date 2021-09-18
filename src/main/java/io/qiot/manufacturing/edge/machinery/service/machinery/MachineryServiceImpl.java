@@ -107,8 +107,8 @@ public class MachineryServiceImpl implements MachineryService {
             // machineryId = UUID.randomUUID().toString();
             // }
             // else
-            machineryId = registrationService.register(machineryData.serial,
-                    machineryData.name, ksPassword);
+            machineryId = registrationService.register(MACHINERY_SERIAL,
+                    MACHINERY_NAME, ksPassword);
 
             machineryData.id = machineryId.toString();
 
