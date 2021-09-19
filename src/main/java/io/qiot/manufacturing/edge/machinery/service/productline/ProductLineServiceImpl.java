@@ -70,7 +70,7 @@ class ProductLineServiceImpl implements ProductLineService {
             throws JsonProcessingException {
         if(Objects.isNull(event.productLine))
             return;
-        LOGGER.debug("Received notification about a new Product Line:\n\n{}",
+        LOGGER.info("Received notification about a new Product Line:\n\n{}",
                 event.productLine.id);
         ProductLineDTO productLine = event.productLine;
         handleNewProductLine(productLine);
