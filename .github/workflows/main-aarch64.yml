@@ -21,6 +21,8 @@ jobs:
       - name: Get the version
         run: |
           echo ::set-env name=TAG_NAME::$(cat projectFile | grep -Po '(?<=Version>).*(?=</Version>)')
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
