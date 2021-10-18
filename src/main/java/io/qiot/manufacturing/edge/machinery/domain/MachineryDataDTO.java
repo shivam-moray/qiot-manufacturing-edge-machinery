@@ -1,7 +1,6 @@
 package io.qiot.manufacturing.edge.machinery.domain;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
