@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Get the version
         run: |
-          echo ::set-env name=TAG_NAME::$(cat projectFile | grep -Po '(?<=Version>).*(?=</Version>)')
+          echo ::set-env name=TAG_NAME::$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Cache local Maven repository
