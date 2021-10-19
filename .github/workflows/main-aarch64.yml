@@ -62,6 +62,6 @@ jobs:
         with:
           registry: quay.io/qiotmanufacturing 
           image: edge-machinery
-          tag: ${{ env.TAG_NAME }}-aarch64 latest-aarch64
+          tag: ${{ env.TAG_NAME }}-aarch64
           username: ${{ secrets.QUAY_ALL_USERNAME }}
           password: ${{ secrets.QUAY_ALL_PASSWORD }}
