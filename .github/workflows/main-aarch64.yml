@@ -3,12 +3,12 @@ name: main - aarch64
 on:
   workflow_dispatch:
   
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    branches:
+#      - main
 
 jobs:
   build:
@@ -63,5 +63,5 @@ jobs:
           registry: quay.io/qiotmanufacturing 
           image: edge-machinery
           tag: ${{ env.TAG_NAME }}-aarch64
-          username: ${{ secrets.QUAY_ALL_USERNAME }}
-          password: ${{ secrets.QUAY_ALL_PASSWORD }}
+          username: ${{ secrets.QUAY_MANUFACTURING_USERNAME }}
+          password: ${{ secrets.QUAY_MANUFACTURING_PASSWORD }}
