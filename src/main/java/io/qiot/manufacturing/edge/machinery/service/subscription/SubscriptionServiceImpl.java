@@ -1,4 +1,4 @@
-package io.qiot.manufacturing.edge.machinery.service.registration;
+package io.qiot.manufacturing.edge.machinery.service.subscription;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,7 +25,7 @@ import io.qiot.manufacturing.edge.machinery.service.machinery.MachineryService;
 import io.qiot.manufacturing.factory.commons.domain.registration.EdgeSubscriptionRequest;
 
 @ApplicationScoped
-public class RegistrationServiceImpl implements RegistrationService {
+public class SubscriptionServiceImpl implements SubscriptionService {
     @Inject
     Logger LOGGER;
     
@@ -45,7 +45,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     MachineryService machineryService;
 
     @Override
-    public UUID register(String serial, String name, String ksPassword)
+    public UUID subscribe(String serial, String name, String ksPassword)
             throws SubscriptionException {
         EdgeSubscriptionRequest registerRequest = null;
         SubscriptionResponse subscriptionResponse = null;
@@ -71,7 +71,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         
         
 
-        LOGGER.debug(
+        LOGGER.info(
                 "Attempting subscription process with the following data: {}",
                 registerRequest);
 

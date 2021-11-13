@@ -1,4 +1,4 @@
-package io.qiot.manufacturing.edge.machinery.service.registration;
+package io.qiot.manufacturing.edge.machinery.service.subscription;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

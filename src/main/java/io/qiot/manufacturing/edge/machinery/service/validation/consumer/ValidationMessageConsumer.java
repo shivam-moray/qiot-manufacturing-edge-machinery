@@ -17,6 +17,7 @@ import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Session;
 
+import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,8 +43,11 @@ public class ValidationMessageConsumer implements Runnable {
     @Inject
     ObjectMapper MAPPER;
 
-    @Inject
-    ConnectionFactory connectionFactory;
+    // @Inject
+//    ConnectionFactory connectionFactory;
+
+     @Inject
+     ActiveMQJMSConnectionFactory connectionFactory;
 
     @Inject
     MachineryService machineryService;

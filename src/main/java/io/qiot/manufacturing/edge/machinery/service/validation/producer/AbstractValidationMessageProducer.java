@@ -3,6 +3,7 @@
  */
 package io.qiot.manufacturing.edge.machinery.service.validation.producer;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -15,6 +16,10 @@ import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import org.apache.activemq.artemis.api.core.TransportConfiguration;
+import org.apache.activemq.artemis.core.remoting.impl.netty.NettyConnectorFactory;
+import org.apache.activemq.artemis.core.remoting.impl.netty.TransportConstants;
+import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,8 +36,11 @@ import io.qiot.manufacturing.factory.commons.util.producer.ValidationReplyToQueu
  */
 public abstract class AbstractValidationMessageProducer {
 
-    @Inject
-    ConnectionFactory connectionFactory;
+    // @Inject
+//    ConnectionFactory connectionFactory;
+
+     @Inject
+     ActiveMQJMSConnectionFactory connectionFactory;
 
     @Inject
     MachineryService machineryService;
@@ -53,6 +61,25 @@ public abstract class AbstractValidationMessageProducer {
 
     protected Queue replyToQueue;
 
+//    public AbstractValidationMessageProducer() {
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put(TransportConstants.HOST_PROP_NAME,
+//                "broker-service-edge-0-svc-rte-factory.apps.manufacturingfacility.qiot.io");
+//        map.put(TransportConstants.PORT_PROP_NAME, 443);
+//        map.put(TransportConstants.SSL_ENABLED_PROP_NAME, true);
+//        map.put(TransportConstants.TRUSTSTORE_PATH_PROP_NAME,
+//                "classpath:/certs/bootstrap/truststore.p12");
+//        map.put(TransportConstants.TRUSTSTORE_PROVIDER_PROP_NAME, "PKCS12");
+//        map.put(TransportConstants.TRUSTSTORE_PASSWORD_PROP_NAME, "password");
+//
+//        TransportConfiguration tc = new TransportConfiguration(
+//                NettyConnectorFactory.class.getName(), map);
+//
+//        ActiveMQJMSConnectionFactory cf = new ActiveMQJMSConnectionFactory(
+//                false, tc);
+//        connectionFactory = cf;
+//    }
+
     protected void doInit() {
         if (Objects.nonNull(context))
             context.close();
@@ -69,11 +96,12 @@ public abstract class AbstractValidationMessageProducer {
         producer.setJMSReplyTo(replyToQueue);
     }
 
-    protected void doRequestValidation(AbstractValidationRequestEventDTO event) {
+    protected void doRequestValidation(
+            AbstractValidationRequestEventDTO event) {
         getLogger().debug("{} stage validation request received.", getStage());
         try {
             String payload = MAPPER.writeValueAsString(event);
-          getLogger().debug("Message payload: {}", payload);
+            getLogger().debug("Message payload: {}", payload);
             TextMessage message = context.createTextMessage();
             message.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
             message.setText(payload);

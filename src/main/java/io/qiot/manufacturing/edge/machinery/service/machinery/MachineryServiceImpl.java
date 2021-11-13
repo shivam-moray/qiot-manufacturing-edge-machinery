@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qiot.manufacturing.all.commons.exception.DataValidationException;
 import io.qiot.manufacturing.all.commons.exception.SubscriptionException;
 import io.qiot.manufacturing.edge.machinery.domain.MachineryDataDTO;
-import io.qiot.manufacturing.edge.machinery.service.registration.RegistrationService;
+import io.qiot.manufacturing.edge.machinery.service.subscription.SubscriptionService;
 
 /**
  * @author andreabattaglia
@@ -40,7 +40,7 @@ public class MachineryServiceImpl implements MachineryService {
     ObjectMapper MAPPER;
 
     @Inject
-    RegistrationService registrationService;
+    SubscriptionService subscriptionService;
 
     @ConfigProperty(name = "qiot.data.reset")
     boolean DO_RESET;
@@ -74,14 +74,14 @@ public class MachineryServiceImpl implements MachineryService {
             LOGGER.error("Failed resetting Factory data: {}",
                     dataFilePathString);
         }
-        registrationService.resetFactoryData();
+        subscriptionService.resetFactoryData();
     }
 
     public MachineryDataDTO checkRegistration()
             throws DataValidationException, SubscriptionException {
         Path dataFilePath = Paths.get(dataFilePathString);
         if (Files.exists(dataFilePath)) {
-            LOGGER.debug(
+            LOGGER.info(
                     "Device is already registered. Loading data from persistent volume...");
             try {
                 String datafileContent = Files.readString(dataFilePath);
@@ -93,9 +93,9 @@ public class MachineryServiceImpl implements MachineryService {
                         e);
                 throw new DataValidationException(e);
             }
-            LOGGER.debug("Data loaded successfully: {}", machineryData);
+            LOGGER.info("Data loaded successfully: {}", machineryData);
         } else {
-            LOGGER.debug(
+            LOGGER.info(
                     "Device is not registered. Stepping through the registration process...");
 
             machineryData = new MachineryDataDTO();
@@ -107,12 +107,12 @@ public class MachineryServiceImpl implements MachineryService {
             // machineryId = UUID.randomUUID().toString();
             // }
             // else
-            machineryId = registrationService.register(MACHINERY_SERIAL,
+            machineryId = subscriptionService.subscribe(MACHINERY_SERIAL,
                     MACHINERY_NAME, ksPassword);
 
             machineryData.id = machineryId.toString();
 
-            LOGGER.debug("Received machinery ID: {}", machineryId);
+            LOGGER.info("Received machinery ID: {}", machineryId);
             try {
                 Files.createFile(dataFilePath);
 
@@ -124,7 +124,7 @@ public class MachineryServiceImpl implements MachineryService {
                 throw new DataValidationException(e);
             }
 
-            LOGGER.debug("Data Created successfully: {}", machineryData);
+            LOGGER.info("Data Created successfully: {}", machineryData);
         }
         return machineryData;
     }
