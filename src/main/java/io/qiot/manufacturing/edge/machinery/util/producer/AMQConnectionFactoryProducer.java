@@ -50,12 +50,17 @@ public class AMQConnectionFactoryProducer {
 
     private ActiveMQJMSConnectionFactory initSSLConnectionFactory() {
         HashMap<String, Object> map = new HashMap<>();
+        map.put(TransportConstants.PROTOCOLS_PROP_NAME, "ssl");
         map.put(TransportConstants.HOST_PROP_NAME,
                 "broker-service-edge-0-svc-rte-factory.apps.manufacturingfacility.qiot.io");
         map.put(TransportConstants.PORT_PROP_NAME, 443);
         map.put(TransportConstants.SSL_ENABLED_PROP_NAME, true);
         map.put(TransportConstants.TRUSTSTORE_PATH_PROP_NAME,
-                "/var/data/qiot/machinery/certs/bootstrap/machineryfactory/truststore.p12");
+                "/var/data/qiot/machinery/data/runtime/client.ks");
+        map.put(TransportConstants.KEYSTORE_PROVIDER_PROP_NAME, "PKCS12");
+        map.put(TransportConstants.KEYSTORE_PASSWORD_PROP_NAME, "password");
+        map.put(TransportConstants.KEYSTORE_PATH_PROP_NAME,
+                "/var/data/qiot/machinery/data/runtime/client.ts");
         map.put(TransportConstants.TRUSTSTORE_PROVIDER_PROP_NAME, "PKCS12");
         map.put(TransportConstants.TRUSTSTORE_PASSWORD_PROP_NAME, "password");
 
