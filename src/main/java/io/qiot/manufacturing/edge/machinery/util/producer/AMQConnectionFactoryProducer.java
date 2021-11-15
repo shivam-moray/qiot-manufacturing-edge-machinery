@@ -1,24 +1,32 @@
 package io.qiot.manufacturing.edge.machinery.util.producer;
 
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.remoting.impl.netty.NettyConnectorFactory;
 import org.apache.activemq.artemis.core.remoting.impl.netty.TransportConstants;
-import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
 
 /**
  * @author andreabattaglia
  *
  */
-@ApplicationScoped
+@Singleton
 public class AMQConnectionFactoryProducer {
+
+    @Inject
+    Logger LOGGER;
 
     @ConfigProperty(name = "qiot.artemis.sslEnabled", defaultValue = "false")
     boolean sslEnabled;
@@ -62,23 +70,46 @@ public class AMQConnectionFactoryProducer {
     @ConfigProperty(name = "qiot.artemis.trustStorePassword")
     String trustStorePassword;
 
-    private ActiveMQJMSConnectionFactory connectionFactory;
+    private ActiveMQConnectionFactory connectionFactory;
+
+    private ReadWriteLock readWriteLock;
+    private final Lock readLock;
+    private final Lock writeLock;
+
+    public AMQConnectionFactoryProducer() {
+        this.readWriteLock = new ReentrantReadWriteLock();
+        this.readLock = this.readWriteLock.readLock();
+        this.writeLock = this.readWriteLock.writeLock();
+    }
 
     @PostConstruct
     void init() {
-        if (sslEnabled)
-            connectionFactory = initSSLConnectionFactory();
-        else
-            connectionFactory = new ActiveMQJMSConnectionFactory(url, username,
-                    password);
+        writeLock.lock();
+        try {
+            if (sslEnabled) {
+                LOGGER.info("SSL ENABLED");
+                connectionFactory = initSSLConnectionFactory();
+            } else {
+                LOGGER.info("SSL DISABLED");
+                connectionFactory = new ActiveMQConnectionFactory(url, username,
+                        password);
+            }
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     @PreDestroy
     void destroy() {
-        connectionFactory.close();
+        writeLock.lock();
+        try {
+            connectionFactory.close();
+        } finally {
+            writeLock.unlock();
+        }
     }
 
-    private ActiveMQJMSConnectionFactory initSSLConnectionFactory() {
+    private ActiveMQConnectionFactory initSSLConnectionFactory() {
 
         HashMap<String, Object> map = new HashMap<>();
 
@@ -97,7 +128,7 @@ public class AMQConnectionFactoryProducer {
         // sslEnabled
         map.put(TransportConstants.SSL_ENABLED_PROP_NAME, true);
         // verifyHost
-        map.put(TransportConstants.VERIFY_HOST_PROP_NAME, verifyHost);
+        map.put(TransportConstants.VERIFY_HOST_PROP_NAME, false);
         // trustAll
         map.put(TransportConstants.TRUST_ALL_PROP_NAME, trustAll);
         // keyStoreProvider
@@ -120,13 +151,17 @@ public class AMQConnectionFactoryProducer {
         TransportConfiguration tc = new TransportConfiguration(
                 NettyConnectorFactory.class.getName(), map);
 
-        ActiveMQJMSConnectionFactory cf = new ActiveMQJMSConnectionFactory(
-                false, tc);
+        ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(false, tc);
         return cf;
     }
 
     @Produces
-    public ActiveMQJMSConnectionFactory produce() {
-        return connectionFactory;
+    public ActiveMQConnectionFactory produce() {
+        readLock.lock();
+        try {
+            return connectionFactory;
+        } finally {
+            readLock.unlock();
+        }
     }
 }

@@ -9,7 +9,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -17,6 +16,7 @@ import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Session;
 
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,8 +41,11 @@ public class LatestProductLineMessageConsumer implements Runnable {
     @Inject
     ObjectMapper MAPPER;
 
+    // @Inject
+    // ConnectionFactory connectionFactory;
+
     @Inject
-    ConnectionFactory connectionFactory;
+    ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     MachineryService machineryService;

@@ -9,7 +9,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -17,7 +16,7 @@ import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Session;
 
-import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,10 +43,10 @@ public class ValidationMessageConsumer implements Runnable {
     ObjectMapper MAPPER;
 
     // @Inject
-//    ConnectionFactory connectionFactory;
+    // ConnectionFactory connectionFactory;
 
-     @Inject
-     ActiveMQJMSConnectionFactory connectionFactory;
+    @Inject
+    ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     MachineryService machineryService;
@@ -100,13 +99,15 @@ public class ValidationMessageConsumer implements Runnable {
     public void run() {
         while (true) {
             try {
-            Message message = consumer.receive();
+                Message message = consumer.receive();
                 String messagePayload = message.getBody(String.class);
                 ValidationResponseDTO messageDTO = MAPPER
                         .readValue(messagePayload, ValidationResponseDTO.class);
-                LOGGER.debug("Received validation result "
-                        + "for STAGE {} on ITEM {} / PRODUCTLINE {}",
-                        messageDTO.stage, messageDTO.itemId, messageDTO.productLineId);
+                LOGGER.debug(
+                        "Received validation result "
+                                + "for STAGE {} on ITEM {} / PRODUCTLINE {}",
+                        messageDTO.stage, messageDTO.itemId,
+                        messageDTO.productLineId);
                 if (messageDTO.valid) {
                     ValidationSuccessfullEvent event = new ValidationSuccessfullEvent();
                     event.productLineId = messageDTO.productLineId;
@@ -130,9 +131,7 @@ public class ValidationMessageConsumer implements Runnable {
                         "The message payload is malformed and the validation request will not be sent: {}",
                         e);
             } catch (Exception e) {
-                LOGGER.error(
-                        "GENERIC ERROR",
-                        e);
+                LOGGER.error("GENERIC ERROR", e);
             }
         }
     }

@@ -7,8 +7,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.jboss.resteasy.plugins.providers.DocumentProvider;
 import org.jboss.resteasy.plugins.providers.FormUrlEncodedProvider;
 import org.jboss.resteasy.plugins.providers.IIOImageProvider;
@@ -47,8 +47,11 @@ public class CoreServiceImpl implements CoreService {
     @Inject
     ProductionChainService productionChainService;
 
+    // @Inject
+    // ConnectionFactory connectionFactory;
+
     @Inject
-    ConnectionFactory connectionFactory;
+    ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     Event<BootstrapCompletedEventDTO> event;

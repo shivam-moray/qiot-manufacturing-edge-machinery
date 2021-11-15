@@ -9,7 +9,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -17,6 +16,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.Topic;
 
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -41,8 +41,11 @@ public class NewProductLineMessageConsumer implements Runnable {
     @Inject
     ObjectMapper MAPPER;
 
+    // @Inject
+    // ConnectionFactory connectionFactory;
+
     @Inject
-    ConnectionFactory connectionFactory;
+    ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     MachineryService machineryService;

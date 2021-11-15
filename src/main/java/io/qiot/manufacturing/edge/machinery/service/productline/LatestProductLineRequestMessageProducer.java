@@ -8,12 +8,12 @@ import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.JMSProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
 
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -29,8 +29,11 @@ public class LatestProductLineRequestMessageProducer {
     @Inject
     Logger LOGGER;
 
+    // @Inject
+    // ConnectionFactory connectionFactory;
+
     @Inject
-    ConnectionFactory connectionFactory;
+    ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ObjectMapper MAPPER;
