@@ -23,43 +23,43 @@ public class AMQConnectionFactoryProducer {
     @ConfigProperty(name = "qiot.artemis.sslEnabled", defaultValue = "false")
     boolean sslEnabled;
 
-    @ConfigProperty(name = "quarkus.artemis.url")
+    @ConfigProperty(name = "qiot.artemis.url")
     String url;
 
-    @ConfigProperty(name = "quarkus.artemis.username")
+    @ConfigProperty(name = "qiot.artemis.username")
     String username;
 
-    @ConfigProperty(name = "quarkus.artemis.password")
+    @ConfigProperty(name = "qiot.artemis.password")
     String password;
 
-    @ConfigProperty(name = "quarkus.artemis.host")
+    @ConfigProperty(name = "qiot.artemis.host")
     String host;
 
-    @ConfigProperty(name = "quarkus.artemis.port")
+    @ConfigProperty(name = "qiot.artemis.port")
     int port;
 
-    @ConfigProperty(name = "quarkus.artemis.verifyHost")
+    @ConfigProperty(name = "qiot.artemis.verifyHost")
     boolean verifyHost;
 
-    @ConfigProperty(name = "quarkus.artemis.trustAll")
+    @ConfigProperty(name = "qiot.artemis.trustAll")
     boolean trustAll;
 
-    @ConfigProperty(name = "quarkus.artemis.keyStoreProvider")
+    @ConfigProperty(name = "qiot.artemis.keyStoreProvider")
     String keyStoreProvider;
 
-    @ConfigProperty(name = "quarkus.artemis.keyStorePath")
+    @ConfigProperty(name = "qiot.artemis.keyStorePath")
     String keyStorePath;
 
-    @ConfigProperty(name = "quarkus.artemis.keyStorePassword")
+    @ConfigProperty(name = "qiot.artemis.keyStorePassword")
     String keyStorePassword;
 
-    @ConfigProperty(name = "quarkus.artemis.trustStoreProvider")
+    @ConfigProperty(name = "qiot.artemis.trustStoreProvider")
     String trustStoreProvider;
 
-    @ConfigProperty(name = "quarkus.artemis.trustStorePath")
+    @ConfigProperty(name = "qiot.artemis.trustStorePath")
     String trustStorePath;
 
-    @ConfigProperty(name = "quarkus.artemis.trustStorePassword")
+    @ConfigProperty(name = "qiot.artemis.trustStorePassword")
     String trustStorePassword;
 
     private ActiveMQJMSConnectionFactory connectionFactory;
