@@ -86,9 +86,13 @@
         </dependency>
         <!-- JMS -->
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-artemis-jms</artifactId>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
         </dependency>
+<!--         <dependency> -->
+<!--             <groupId>io.quarkus</groupId> -->
+<!--             <artifactId>quarkus-artemis-jms</artifactId> -->
+<!--         </dependency> -->
 <!--         <dependency> -->
 <!--             <groupId>org.amqphub.quarkus</groupId> -->
 <!--             <artifactId>quarkus-qpid-jms</artifactId> -->
