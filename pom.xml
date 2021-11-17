@@ -85,14 +85,14 @@
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
         <!-- JMS -->
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>artemis-jms-client</artifactId>
-        </dependency>
         <!-- <dependency> -->
-        <!-- <groupId>io.quarkus</groupId> -->
-        <!-- <artifactId>quarkus-artemis-jms</artifactId> -->
+        <!-- <groupId>org.apache.activemq</groupId> -->
+        <!-- <artifactId>artemis-jms-client</artifactId> -->
         <!-- </dependency> -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-artemis-jms</artifactId>
+        </dependency>
         <!-- SCHEDULER -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -243,5 +243,8 @@
             </properties>
         </profile>
     </profiles>
+    <!-- <acceptor name="edge">tcp://broker-service-ss-0.broker-service-hdls-svc.factory.svc.cluster.local:61617?protocols=CORE;sslEnabled=true;keyStorePath=/etc/endpoint-service-tls-secret-volume/broker.ks;keyStorePassword=password;trustStorePath=/etc/endpoint-service-tls-secret-volume/client.ts;trustStorePassword=password;enabledCipherSuites=TLS_RSA_WITH_AES_256_CBC_SHA;enabledProtocols=TLSv1,TLSv1.1,TLSv1.2;needClientAuth=true;wantClientAuth=true;sslProvider=JDK;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;useEpoll=true;amqpCredits=1000;amqpMinCredits=300</acceptor> -->
+    <!-- <acceptor name="amqp">tcp://broker-service-ss-0.broker-service-hdls-svc.factory.svc.cluster.local:5672?protocols=AMQP;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;useEpoll=true;amqpCredits=1000;amqpMinCredits=300</acceptor> -->
+    <!-- <acceptor name="scaleDown">tcp://broker-service-ss-0.broker-service-hdls-svc.factory.svc.cluster.local:61616?protocols=CORE;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;useEpoll=true;amqpCredits=1000;amqpMinCredits=300</acceptor> -->
 </project>
     
