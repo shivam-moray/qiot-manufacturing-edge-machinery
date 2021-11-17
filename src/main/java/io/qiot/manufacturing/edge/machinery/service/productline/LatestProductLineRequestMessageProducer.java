@@ -30,7 +30,7 @@ public class LatestProductLineRequestMessageProducer {
     Logger LOGGER;
 
     // @Inject
-    // ConnectionFactory connectionFactory;
+    // ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ActiveMQConnectionFactory connectionFactory;

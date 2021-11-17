@@ -48,7 +48,7 @@ public class CoreServiceImpl implements CoreService {
     ProductionChainService productionChainService;
 
     // @Inject
-    // ConnectionFactory connectionFactory;
+    // ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ActiveMQConnectionFactory connectionFactory;

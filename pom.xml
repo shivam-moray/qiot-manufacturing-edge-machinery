@@ -85,10 +85,10 @@
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
         <!-- JMS -->
-        <!-- <dependency> -->
-        <!-- <groupId>org.apache.activemq</groupId> -->
-        <!-- <artifactId>artemis-jms-client</artifactId> -->
-        <!-- </dependency> -->
+<!--         <dependency> -->
+<!--         <groupId>org.apache.activemq</groupId> -->
+<!--         <artifactId>artemis-jms-client</artifactId> -->
+<!--         </dependency> -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-artemis-jms</artifactId>

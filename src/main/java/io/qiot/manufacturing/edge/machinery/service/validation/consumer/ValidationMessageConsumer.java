@@ -43,7 +43,7 @@ public class ValidationMessageConsumer implements Runnable {
     ObjectMapper MAPPER;
 
     // @Inject
-    // ConnectionFactory connectionFactory;
+    // ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ActiveMQConnectionFactory connectionFactory;

@@ -42,7 +42,7 @@ public class LatestProductLineMessageConsumer implements Runnable {
     ObjectMapper MAPPER;
 
     // @Inject
-    // ConnectionFactory connectionFactory;
+    // ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ActiveMQConnectionFactory connectionFactory;
@@ -96,7 +96,7 @@ public class LatestProductLineMessageConsumer implements Runnable {
 
     @Override
     public void run() {
-//        while (true) {
+        while (true) {
             try {
                 Message message = consumer.receive();
                 String messagePayload = message.getBody(String.class);
@@ -118,6 +118,6 @@ public class LatestProductLineMessageConsumer implements Runnable {
             } catch (Exception e) {
                 LOGGER.error("GENERIC ERROR", e);
             }
-//        }
+        }
     }
 }
