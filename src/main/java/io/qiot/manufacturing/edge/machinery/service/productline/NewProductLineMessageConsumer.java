@@ -41,9 +41,6 @@ public class NewProductLineMessageConsumer implements Runnable {
     @Inject
     ObjectMapper MAPPER;
 
-    // @Inject
-    // ActiveMQConnectionFactory connectionFactory;
-
     @Inject
     ActiveMQConnectionFactory connectionFactory;
 

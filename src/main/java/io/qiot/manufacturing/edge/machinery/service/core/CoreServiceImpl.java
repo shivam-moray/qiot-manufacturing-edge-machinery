@@ -47,12 +47,6 @@ public class CoreServiceImpl implements CoreService {
     @Inject
     ProductionChainService productionChainService;
 
-    // @Inject
-    // ActiveMQConnectionFactory connectionFactory;
-
-    @Inject
-    ActiveMQConnectionFactory connectionFactory;
-
     @Inject
     Event<BootstrapCompletedEventDTO> event;
 

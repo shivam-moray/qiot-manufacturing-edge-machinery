@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.jms.IllegalStateRuntimeException;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -40,9 +41,6 @@ public class LatestProductLineMessageConsumer implements Runnable {
 
     @Inject
     ObjectMapper MAPPER;
-
-    // @Inject
-    // ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ActiveMQConnectionFactory connectionFactory;
@@ -100,13 +98,16 @@ public class LatestProductLineMessageConsumer implements Runnable {
             try {
                 Message message = consumer.receive();
                 String messagePayload = message.getBody(String.class);
+                if(Objects.isNull(messagePayload)) {
+                    LOGGER.warn("Empty message payload. Discarding: {}",messagePayload);
+                }
                 ProductLineDTO productLine = MAPPER.readValue(messagePayload,
                         ProductLineDTO.class);
                 LOGGER.debug("Received latest PRODUCTLINE available from the Factory Controller: \n {}", productLine);
                 ProductLineChangedEventDTO eventDTO = new ProductLineChangedEventDTO();
                 eventDTO.productLine = productLine;
                 prodictLineChangedEvent.fire(eventDTO);
-            } catch (JMSException e) {
+            } catch (JMSException | IllegalStateRuntimeException e) {
                 LOGGER.error(
                         "The messaging client returned an error: {} and will be restarted.",
                         e);

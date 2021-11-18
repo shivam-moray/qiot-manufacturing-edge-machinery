@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.jms.IllegalStateRuntimeException;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -41,9 +42,6 @@ public class ValidationMessageConsumer implements Runnable {
 
     @Inject
     ObjectMapper MAPPER;
-
-    // @Inject
-    // ActiveMQConnectionFactory connectionFactory;
 
     @Inject
     ActiveMQConnectionFactory connectionFactory;
@@ -121,7 +119,7 @@ public class ValidationMessageConsumer implements Runnable {
                     event.stage = messageDTO.stage;
                     failureEvent.fire(event);
                 }
-            } catch (JMSException e) {
+            } catch (JMSException | IllegalStateRuntimeException e) {
                 LOGGER.error(
                         "The messaging client returned an error: {} and will be restarted.",
                         e);
